@@ -11,9 +11,9 @@ router.all('/', function(req, res, next) {
 });
 
 function valid_index_form(req) {
-    var number = req.param('default-jersey-number');
-    var select_name = req.param('select-name');
-    var textbox_name = req.param('textbox-name');
+    var number = req.body['default-jersey-number'];
+    var select_name = req.body['select-name'];
+    var textbox_name = req.body['textbox-name'];
     /*
     console.log('number:', number);
     console.log('select_name:', select_name);

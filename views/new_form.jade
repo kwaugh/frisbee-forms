@@ -10,4 +10,10 @@ block content
         br
         form(method='post')
             .form-group
+                label Form Name:
+                input.form-control(type='text' name='form-name' placeholder='Name')
+            hr
+            .form-group
                 button.btn.btn-primary#add-item Add Item
+            .form-group
+                button.btn.btn-success.btn-block(type='submit') Submit Form

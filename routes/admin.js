@@ -10,9 +10,9 @@ router.all('/', function(req, res, next) {
         res.render('admin', { title: 'Admin page' });
         return;
     }
-    if (req.param('admin-password')) {
+    if (req.body['admin-password']) {
         admins.findOne({}, function(err, doc) {
-            if (req.param('admin-password') === doc.password) {
+            if (req.body['admin-password'] === doc.password) {
                 req.session.admin = true;
                 console.log('req.session.admin:', req.session.admin);
                 res.render('admin', { title: 'Admin page' });
