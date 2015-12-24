@@ -21,6 +21,6 @@ block content
                 input.form-control#textbox-name(type='text' name='textbox-name' placeholder='Name')
             .form-group
                 label Default Jersey Number:
-                input.form-control(type='text' name='default-jersey-number' placeholder='Number' required)
+                input.form-control(type='number' min='0' max='99' name='default-jersey-number' placeholder='Number' required)
             .form-group
                 button.btn.btn-default(type='submit') Submit

@@ -1,3 +1,6 @@
+global.MONGOJS = require('mongojs');
+global.DB = MONGOJS('frisbee-forms');
+
 var express = require('express');
 var session = require('express-session');
 var path = require('path');
@@ -8,6 +11,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var form   = require('./routes/form');
+var admin  = require('./routes/admin');
 
 var app = express();
 
@@ -32,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/form', form);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
