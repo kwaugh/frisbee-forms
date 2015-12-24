@@ -1,17 +1,19 @@
 global.MONGOJS = require('mongojs');
 global.DB = MONGOJS('frisbee-forms');
 
-var express = require('express');
-var session = require('express-session');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
+var express      = require('express');
+var session      = require('express-session');
+var path         = require('path');
+var favicon      = require('serve-favicon');
+var logger       = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var bodyParser   = require('body-parser');
 
-var routes = require('./routes/index');
-var form   = require('./routes/form');
-var admin  = require('./routes/admin');
+var routes    = require('./routes/index');
+var form      = require('./routes/form');
+var admin     = require('./routes/admin');
+var new_form  = require('./routes/new_form');
+var edit_form = require('./routes/edit_form');
 
 var app = express();
 
@@ -26,17 +28,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-      secret: 'akdJklw490Jk9Q3Fjdkgnb',
-      resave: false,
-      saveUninitialized: true,
-      cookie: { secure: true  }
-
+    cookie: {
+        path    : '/',
+        httpOnly: false,
+        maxAge  : 24*60*60*1000
+    },
+    secret: 'akdJklw490Jk9Q3Fjdkgnb',
+    resave: false,
+    saveUninitialized: false,
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/form', form);
 app.use('/admin', admin);
+app.use('/new_form', new_form);
+app.use('/edit_form', edit_form);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
