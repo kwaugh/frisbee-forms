@@ -2,6 +2,7 @@ extends layout
 
 block header
     title Information
+    script(src='javascripts/index_form.js')
 
 block content
     h1 Information
@@ -12,9 +13,8 @@ block content
             label Name:
             select.form-control#select-name(name='select-name')
                 option(selected) Custom
-                option(value='Test Test') Test Test
                 each name in names
-                    p nothing
+                    option(value='#{name.name}') #{name.name}
         .form-group.text-muted OR
         .form-group
             input.form-control#textbox-name(type='text' name='textbox-name' placeholder='Name')
