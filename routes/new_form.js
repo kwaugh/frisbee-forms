@@ -3,6 +3,7 @@ var router = express.Router();
 
 var forms = DB.collection('forms');
 
+/* Admin page for creating new forms */
 router.all('/', function(req, res, next) {
     if (!req.session.admin) {
         res.redirect('admin');
@@ -16,7 +17,7 @@ router.all('/', function(req, res, next) {
     /* Time to build the database entry */
     var form = {name: req.body['form-name'], items: []};
     var current_item_num = -1;
-    for (key in req.body) {
+    for (var key in req.body) {
         if (key.indexOf('item-num') === 0) { // It's a new item
             console.log('key:', key);
             form.items.push({name: req.body[key], sizes: [], subitems: []}); 

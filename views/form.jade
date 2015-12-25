@@ -8,21 +8,24 @@ block content
     h1= title
     hr
     input#default-number(type='hidden' value='#{default_number}')
-    form(method='post')
+    form(method='post' action='form_submit')
+        input(type='hidden' value='#{name}' name='name')
         each item in form.items
             h3 #{item.name}
             each size in item.sizes
                 .size
+                    .hidden.item-name #{item.name}-#{size}
                     .form-group
                         label= size
-                        input.form-control.quantity(type='number' min='0' max='10', value='0')
+                        input.form-control.quantity(type='number' name='quantity-#{item.name}-#{size}' min='0' max='10', value='0')
             each subitem in item.subitems
                 hr
                 h4 #{subitem.name}
                 .form-group
                     each size in subitem.sizes
                         .size
+                            .hidden.item-name #{subitem.name}-#{size}
                             .form-group
                                 label= size
-                                input.form-control.quantity(type='number' min='0' max='10' value='0')
+                                input.form-control.quantity(type='number' name='quantity-#{subitem.name}-#{size}' min='0' max='10' value='0')
         button.btn.btn-primary(type='submit') Submit

@@ -4,7 +4,7 @@ var router = express.Router();
 var forms = DB.collection('forms');
 var names = DB.collection('names');
 
-/* Form page */
+/* User page for filling out forms */
 router.all('/', function(req, res, next) {
     var form = req.body['form'];
     var textbox_name = req.body['textbox-name'];
@@ -32,7 +32,7 @@ router.all('/', function(req, res, next) {
             return;
         }
         console.log('docs:', docs);
-        res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number});
+        res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name});
     });
     
 });
