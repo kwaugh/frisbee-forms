@@ -1,17 +1,27 @@
 doctype html
 html
-  head
-    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' integrity='sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/sticky-footer.css')
-    link(rel='stylesheet' href='/stylesheets/style.css')
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js')
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js' integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS' crossorigin='anonymous')
-    block header
+    head
+        link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' integrity='sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7' crossorigin='anonymous')
+        link(rel='stylesheet' href='/stylesheets/sticky-footer.css')
+        link(rel='stylesheet' href='/stylesheets/style.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js' integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS' crossorigin='anonymous')
+        block header
 
-  body
-    block content
+    body
+        .container.center-block
+            nav.navbar.navbar-default.navbar-static
+                div.navbar-collapse
+                    div.main-navbar
+                        ul.nav.navbar-nav
+                            li.dropdown
+                                a#home-link.dropdown-toggle(href='/', role='button')  Home 
+                        ul.nav.navbar-nav.navbar-right
+                            li.dropdown
+                                a#account-link.dropdown-toggle(href='/admin', role='button') Admin
+            block content
 
-    footer.footer
-        .container
-            .pull-right.text-muted TUFF
+        footer.footer
+            .container
+                .pull-right.text-muted TUFF
 

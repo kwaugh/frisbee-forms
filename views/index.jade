@@ -6,10 +6,9 @@ block header
 
 
 block content
-    .container.center-block
-        h1= title
-        p Please select a form: 
-        form(method='post' action='info')
-            each form in forms
-                .col-md-2.col-xs-4
-                    button.btn.btn-primary(type='submit' value='#{form.name}' name='form') #{form.name}
+    h1= title
+    p Please select a form: 
+    form(method='post' action='info')
+        each form in forms
+            .col-md-2.col-xs-4
+                button.btn.btn-primary(type='submit' value='#{form.name}' name='form') #{form.name}
