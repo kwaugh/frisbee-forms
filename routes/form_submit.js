@@ -25,8 +25,8 @@ router.all('/', function(req, res, next) {
     console.log('order:', order);
     orders.save(order);
 
-    /* Take them back to the home page */
-    res.redirect('/');
+    /* Take them back to the done message page */
+    res.redirect('/submitted');
 });
 
 module.exports = router;

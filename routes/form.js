@@ -14,7 +14,7 @@ router.all('/', function(req, res, next) {
         res.redirect('/');
         return;
     }
-    var name;
+    var name = '';
     /* Default to select name if it is filled out */
     if (select_name && select_name !== null && select_name !== 'Custom') {
         name = select_name;
@@ -22,7 +22,7 @@ router.all('/', function(req, res, next) {
         name = textbox_name;
     }
     names.findOne({'name': name}, function(err, docs) {
-        if (err || !docs || docs.length === 0) {
+        if ((err || !docs || docs.length === 0) && name !== '') {
             names.save({'name': name});
         }
     });

@@ -9,5 +9,5 @@ block content
     p Please select a form: 
     form(method='post' action='info')
         each form in forms
-            .col-md-2.col-xs-4
-                button.btn.btn-primary(type='submit' value='#{form.name}' name='form') #{form.name}
+            .form-group
+                button.btn.btn-default(type='submit' value='#{form.name}' name='form') #{form.name}
