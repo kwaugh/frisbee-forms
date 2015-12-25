@@ -1,8 +1,23 @@
 extends layout
 
 block header
+    script(src='/javascripts/form.js')
     title #{title}
 
 block content
     .container.center-block
         h1= title
+        hr
+        input#default-number(type='hidden' value='#{default_number}')
+        form(method='post')
+            each item in form.items
+                h3 #{item.name}
+                each subitem in item.subitems
+                    hr
+                    h4 #{subitem.name}
+                    .form-group
+                        each size in subitem.sizes
+                            .form-group
+                                label= size
+                                input.form-control.quantity(type='number' min='0' max='10' value='0')
+            button.btn.btn-primary(type='submit') Submit

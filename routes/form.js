@@ -1,26 +1,24 @@
 var express = require('express');
 var router = express.Router();
 
+var forms = DB.collection('forms');
+
 /* Form page */
 router.all('/', function(req, res, next) {
-    if (!valid_index_form(req)) {
+    var form = req.body['form'];
+    if (!form || form === null) {
         res.redirect('/');
         return;
     }
-    res.render('form', { title: 'Jersey/Shorts Order Form' , names: [] });
+    forms.findOne({name: form}, function(err, docs) {
+        if (err || !docs || docs.length === 0) {
+            res.redirect('/');
+            return;
+        }
+        console.log('docs:', docs);
+        res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: req.body['default-jersey-number']});
+    });
+    
 });
-
-function valid_index_form(req) {
-    return true;
-    var number = req.body['default-jersey-number'];
-    var select_name = req.body['select-name'];
-    var textbox_name = req.body['textbox-name'];
-    /*
-    console.log('number:', number);
-    console.log('select_name:', select_name);
-    console.log('textbox_name:', textbox_name);
-    */
-    return number && ((select_name && select_name !== 'Custom') || textbox_name);
-}
 
 module.exports = router;

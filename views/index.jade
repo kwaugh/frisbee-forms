@@ -9,24 +9,7 @@ block content
     .container.center-block
         h1= title
         p Please select a form: 
-        form(method='post' action='form')
+        form(method='post' action='info')
             each form in forms
                 .col-md-2.col-xs-4
-                    button.btn.btn-primary(type='submit' val='#{form.name}') #{form.name}
-        //
-            form#index-form(action='form' method='post')
-                .form-group
-                    label Name:
-                    select.form-control#select-name(name='select-name')
-                        option(selected) Custom
-                        option(value='Test Test') Test Test
-                        each name in names
-                            p nothing
-                .form-group.text-muted OR
-                .form-group
-                    input.form-control#textbox-name(type='text' name='textbox-name' placeholder='Name')
-                .form-group
-                    label Default Jersey Number:
-                    input.form-control(type='number' min='0' max='99' name='default-jersey-number' placeholder='Number' required)
-                .form-group
-                    button.btn.btn-default(type='submit') Submit
+                    button.btn.btn-primary(type='submit' value='#{form.name}' name='form') #{form.name}

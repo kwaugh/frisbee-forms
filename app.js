@@ -14,6 +14,7 @@ var form      = require('./routes/form');
 var admin     = require('./routes/admin');
 var new_form  = require('./routes/new_form');
 var edit_form = require('./routes/edit_form');
+var info      = require('./routes/info');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use('/form', form);
 app.use('/admin', admin);
 app.use('/new_form', new_form);
 app.use('/edit_form', edit_form);
+app.use('/info', info);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
