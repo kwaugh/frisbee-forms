@@ -11,6 +11,11 @@ block content
     form(method='post')
         each item in form.items
             h3 #{item.name}
+            each size in item.sizes
+                .size
+                    .form-group
+                        label= size
+                        input.form-control.quantity(type='number' min='0' max='10', value='0')
             each subitem in item.subitems
                 hr
                 h4 #{subitem.name}

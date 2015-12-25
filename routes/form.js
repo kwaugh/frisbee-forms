@@ -21,7 +21,11 @@ router.all('/', function(req, res, next) {
     } else {
         name = textbox_name;
     }
-    names.save({'name': name});
+    names.findOne({'name': name}, function(err, docs) {
+        if (err || !docs || docs.length === 0) {
+            names.save({'name': name});
+        }
+    });
     forms.findOne({name: form}, function(err, docs) {
         if (err || !docs || docs.length === 0) {
             res.redirect('/');

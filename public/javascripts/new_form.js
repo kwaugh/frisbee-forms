@@ -4,6 +4,7 @@ $(function() {
     var num_items_on_page = 0;
 
     var sizes = "<div class='form-group item-sizes'><label>Available Sizes:</label><select multiple class='form-control tall-select' required> \
+                                                        <option value=''>N/A</option> \
                                                         <option value='XS'>X-Small</option> \
                                                         <option value='S'>Small</option> \
                                                         <option value='M'>Medium</option> \
