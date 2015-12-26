@@ -15,7 +15,7 @@ $(function() {
         var num_items_on_page = $(form).find('.item-parent').length;
         var subitem_num = $(form).find('.subitem-group').length;
         var item_num = num_items_on_page;
-        var max_num = Math.max(item_num, subitem_num);
+        var max_num = item_num + subitem_num;
         $(this).before("<div class='item-parent'><div class='form-group'><label>Item:</label> \
                             <button class='glyphicon glyphicon-remove pull-right remove-item text-danger'></button>\
                             <input type='text' id='item-"+ item_num + "' name='item-num-" + item_num + "' class='form-control' placeholder='Item' required/> \
