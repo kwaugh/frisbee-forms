@@ -10,10 +10,12 @@ router.all('/', function(req, res, next) {
         return;
     }
     console.log('req.body:', req.body);
-    if (req.body === {}) {
+    if (!req.body || req.body === null || req.body == {} || !req.body['form-name']) {
+        console.log('empty body');
         res.render('new_form', {});
         return;
     }
+    console.log('im here');
     /* Time to build the database entry */
     var form = {name: req.body['form-name'], items: []};
     var current_item_num = -1;
