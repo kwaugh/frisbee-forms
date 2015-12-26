@@ -21,9 +21,12 @@ router.all('/', function(req, res, next) {
     } else {
         name = textbox_name;
     }
-    names.findOne({'name': name}, function(err, docs) {
-        if ((err || !docs || docs.length === 0) && name !== '') {
-            names.save({'name': name});
+    names.findOne({'name': name}, function(err, doc) {
+        if ((err || !doc || doc === '') && name !== '') {
+            // Save their preferred number
+            names.save({'name': name, 'number': jersey_number});
+        } else {
+            names.update(doc, {'name': name, 'number': jersey_number});
         }
     });
     forms.findOne({name: form}, function(err, docs) {

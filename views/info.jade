@@ -13,13 +13,19 @@ block content
             label Name:
             select.form-control#select-name(name='select-name')
                 option(selected) Custom
+                - var index = 0
                 each name in names
-                    option(value='#{name.name}') #{name.name}
+                    option(value='#{name.name}' id='#{index}-name') #{name.name}
+                    - index++
+            - var index = 0
+            each name in names
+                .hidden(id='#{index}-number') #{name.number}
+                - index++
         .form-group.text-muted OR
         .form-group
             input.form-control#textbox-name(type='text' name='textbox-name' placeholder='Name')
         .form-group
             label Default Jersey Number:
-            input.form-control(type='number' min='0' max='99' name='default-jersey-number' placeholder='Number' required)
+            input.form-control(type='number' min='0' max='99' name='default-jersey-number' id='default-jersey-number' placeholder='Number' required)
         .form-group
             button.btn.btn-default(type='submit') Submit
