@@ -32,9 +32,15 @@ router.all('/', function(req, res, next) {
     }
     console.log('form:', JSON.stringify(form));
     if (req.body['form-name'] && req.body['form-name'] !== null) {
-        forms.save(form);
+        forms.findOne({name: req.body['form-name']}, function(err, doc) {
+            if (!err && doc && doc !== null) { // Update if it exists, create new otherwise
+                forms.update(doc, form);
+            } else {
+                forms.save(form);
+            }
+        });
     }
-    res.render('new_form', {});
+    res.render('admin', {});
     //res.redirect('admin', {});
 });
 
