@@ -27,9 +27,9 @@ router.all('/', function(req, res, next) {
         } else if (key.indexOf('subitem-num') === 0) {
             form.items[current_item_num].subitems.push({name: req.body[key], sizes:[]});
         } else if (key.indexOf('item-size') === 0) {
-            form.items[current_item_num].sizes = req.body[key];
+            form.items[current_item_num].sizes = [].concat(req.body[key]);
         } else if (key.indexOf('subitem-size') === 0) {
-            form.items[current_item_num].subitems[form.items[current_item_num].subitems.length - 1].sizes = req.body[key]; 
+            form.items[current_item_num].subitems[form.items[current_item_num].subitems.length - 1].sizes = [].concat(req.body[key]); 
         }
     }
     console.log('form:', JSON.stringify(form));
