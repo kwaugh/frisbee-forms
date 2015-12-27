@@ -17,6 +17,7 @@ var edit_form   = require('./routes/edit_form');
 var info        = require('./routes/info');
 var form_submit = require('./routes/form_submit');
 var form_delete = require('./routes/form_delete');
+var form_delete_responses = require('./routes/form_delete_responses');
 var submitted   = require('./routes/submitted');
 
 var app = express();
@@ -50,6 +51,7 @@ app.use('/edit_form', edit_form);
 app.use('/info', info);
 app.use('/form_submit', form_submit);
 app.use('/form_delete', form_delete);
+app.use('/form_delete_responses', form_delete_responses);
 app.use('/submitted', submitted);
 
 // catch 404 and forward to error handler

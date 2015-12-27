@@ -6,7 +6,11 @@ var orders = DB.collection('orders');
 /* Page to validate user form submissions */
 router.all('/', function(req, res, next) {
     console.log('req.body:', req.body);
-    var order = {name: '', items: []};
+    if (!req.body['form-name']) {
+        res.redirect('/');
+        return;
+    }
+    var order = {form_name: req.body['form-name'], player_name: '', items: []};
     var item_num = -1;
     for (var key in req.body) {
         if (key.indexOf('name') === 0) {

@@ -10,6 +10,7 @@ block content
     input#default-number(type='hidden' value='#{default_number}')
     form(method='post' action='form_submit')
         input(type='hidden' value='#{name}' name='name')
+        input(type='hidden' value='#{form.name}' name='form-name')
         each item in form.items
             h3 #{item.name}
             each size in item.sizes
