@@ -3,6 +3,7 @@ var router = express.Router();
 
 var forms = DB.collection('forms');
 var names = DB.collection('names');
+var orders = DB.collection('orders');
 
 /* User page for filling out forms */
 router.all('/', function(req, res, next) {
@@ -21,6 +22,7 @@ router.all('/', function(req, res, next) {
     } else {
         name = textbox_name;
     }
+    // Add jersey number to player name
     names.findOne({'name': name}, function(err, doc) {
         if ((err || !doc || doc === '') && name !== '') {
             // Save their preferred number
@@ -34,8 +36,20 @@ router.all('/', function(req, res, next) {
             res.redirect('/');
             return;
         }
+        /*
         console.log('docs:', docs);
-        res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name});
+        console.log('name:', name);
+        console.log('form:', form);
+        */
+        orders.findOne({name: name, form_name: form}, function(err, doc) {
+            console.log('doc:', doc);
+            if (err || !doc) {
+                res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, order: {}});
+            } else {
+                console.log('I found a previous order');
+                res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, order: doc});
+            }
+        });
     });
     
 });
