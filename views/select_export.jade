@@ -1,0 +1,16 @@
+extends layout
+
+block header
+    title Export
+
+block content
+    h1 Export Forms
+    p Please select the form that you would like to export:
+    form(method='post' action='/export')
+        .form-group
+            label Form:
+            select.form-control(name='form-name')
+                each form in forms
+                    option(value='#{form.name}') #{form.name}
+        .form-group
+            button.btn.btn-primary(type='submit') Submit

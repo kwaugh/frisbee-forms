@@ -22,6 +22,7 @@ router.all('/', function(req, res, next) {
     } else {
         name = textbox_name;
     }
+    name = name.trim();
     // Add jersey number to player name
     names.findOne({'name': name}, function(err, doc) {
         if ((err || !doc || doc === '') && name !== '') {

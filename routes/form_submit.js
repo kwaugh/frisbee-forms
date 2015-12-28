@@ -16,7 +16,7 @@ router.all('/', function(req, res, next) {
         if (key.indexOf('name') === 0) {
             order.player_name = req.body[key]; 
         } else if (key.indexOf('quantity') === 0) {
-            if (req.body[key] == 0) continue; // Skip order with quantity === 0
+            // if (req.body[key] == 0) continue; // Skip order with quantity === 0
             var name = key.substring(key.indexOf('-') + 1);
             var quantity = req.body[key];
             var item = {'name': name, 'quantity': quantity, numbers: []};
