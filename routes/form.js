@@ -36,12 +36,7 @@ router.all('/', function(req, res, next) {
             res.redirect('/');
             return;
         }
-        /*
-        console.log('docs:', docs);
-        console.log('name:', name);
-        console.log('form:', form);
-        */
-        orders.findOne({name: name, form_name: form}, function(err, doc) {
+        orders.findOne({player_name: name, form_name: form}, function(err, doc) {
             console.log('doc:', doc);
             if (err || !doc) {
                 res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, order: {}});

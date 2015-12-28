@@ -27,7 +27,12 @@ router.all('/', function(req, res, next) {
         }
     }
     console.log('order:', order);
-    orders.save(order);
+    orders.findOne({player_name: order.player_name}, function(err, doc) {
+        if (!err && doc) {
+            orders.remove(doc);
+        }
+        orders.save(order);
+    });
 
     /* Take them back to the done message page */
     res.redirect('/submitted');
