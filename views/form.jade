@@ -54,6 +54,8 @@ block content
                                             - var count = 1
                                             each number in order_item.numbers
                                                 .form-group.col-xs-offset-1.number
+                                                    if count === 1
+                                                        br
                                                     label Number:
                                                     input.form-control(type='number' name='number-#{item.name}-#{size}-#{count}' value='#{number}' placeholder='Number')
                                                     - count++
