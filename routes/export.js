@@ -1,10 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-/*
-var path = require('path');
-var mime = require('mime');
-*/
+var fs = require('fs');
 
 var orders = DB.collection('orders');
 var forms = DB.collection('forms');
@@ -61,7 +58,6 @@ router.all('/', function(req, res, next) {
             }
         }
         // Done building the column headers
-        console.log('csv:', csv);
         csv += '\n';
         
         orders.find({'form_name': form_name}, function(err, docs) {
@@ -85,6 +81,23 @@ router.all('/', function(req, res, next) {
                 csv += '\n';
             }
             console.log('csv:', csv);
+            var fileName = './data_' + req.sessionId;
+            fs.writeFile(fileName, csv, function(err) {
+                if (err) {
+                    console.log('Couldnt save the file');
+                }
+                res.download(fileName, form_name + '.csv', function(err) {
+                    if (err) {
+                        console.log('Error downloading the file');
+                    }
+                    // Delete the file
+                    fs.unlink(fileName, function(err) {
+                        if (err) {
+                            console.log('Error when deleting the file');
+                        }
+                    });
+                });
+            });
         });
 
     });
