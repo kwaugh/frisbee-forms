@@ -17,7 +17,7 @@ block content
             - var sanitized_name = item.name.split(' ').join('_')
             each size in item.sizes
                 .size
-                    .hidden.item-name #{item.name}-#{size}
+                    .hidden.item-name #{sanitized_name}-#{size}
                     .form-group
                         label= size
                         // Check to see if the user has already ordered something
@@ -41,18 +41,18 @@ block content
             each subitem in item.subitems
                 hr
                 h4 #{subitem.name}
-                - var sanitized_subitem_name = subitem.name.split(' ').join('_')
+                - var sanitized_subitem_name = sanitized_name + '-' + subitem.name.split(' ').join('_')
                 .form-group
                     each size in subitem.sizes
                         .size
-                            .hidden.item-name #{subitem.name}-#{size}
+                            .hidden.item-name #{sanitized_subitem_name}-#{size}
                             .form-group
                                 label= size
                                 // Check to see if the user has already ordered something
                                 - var found_sub_item = false
                                 if order.items
                                     each order_item in order.items
-                                        if order_item.name === subitem.name + '-' + size
+                                        if order_item.name === item.name + '-' + subitem.name + '-' + size
                                             input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='10', value='#{order_item.quantity}')
                                             - var count = 1
                                             each number in order_item.numbers
