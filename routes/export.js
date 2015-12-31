@@ -25,34 +25,51 @@ router.all('/', function(req, res, next) {
             return;
         }
 
-        var csv = 'Name,';
-        for (var item_index in doc.items) {
-            var item = doc.items[item_index];
-            // console.log('item:', item);
+        var csv = '';
+
+        // Build the first row, which is item names (only if there are subitems)
+        var has_subitems = false;
+        for (var item of doc.items) {
+            if (item.subitems && item.subitems.length !== 0) {
+                has_subitems = true;
+                break;
+            }
+        }
+
+        if (has_subitems) {
+            csv += ','; // Empty cell above name column
+            for (var item of doc.items) {
+                if (item.subitems && item.subitems.length !== 0) {
+                    csv += item.name;
+                }
+                for (var subitem of item.subitems) {
+                    // *2 because of number columns
+                    for (var i = 0; i < subitem.sizes.length * 2; i++) {
+                        csv += ',';
+                    }
+                }
+            }
+            csv += '\n';
+        }
+
+        csv += 'Name,';
+        for (var item of doc.items) {
             if (item.subitems && item.subitems.length !== 0) { // There are subitems
-                for (var subitem_index in item.subitems) {
-                    var subitem = item.subitems[subitem_index]; 
-                    // console.log('subitem:', subitem);
+                for (var subitem of item.subitems) {
                     if (subitem.sizes.length !== 0) {
-                        for (var size_index in subitem.sizes) {
-                            var size = subitem.sizes[size_index]; 
-                            // console.log('subitem sizes');
-                            csv += subitem.name + ' ' + item.name + ' ' + size + ',Number,';
+                        for (var size of subitem.sizes) {
+                            csv += subitem.name + ' ' + size + ',Number,';
                         }
                     } else { // There is no applicabale size (e.g. hats)
-                         // console.log('subitem no sizes');
-                        csv += subitem.name + ' ' + item.name + ',Number,';
+                        csv += subitem.name + ',Number,';
                     }
                 }
             } else { // No subitems
                 if (item.sizes && item.sizes.length !== 0) {
-                    for (var size_index in item.sizes) {
-                        var size = item.sizes[size_index];
-                        // console.log('item sizes');
+                    for (var size of item.sizes) {
                         csv += item.name + ' ' + size + ',Number,';
                     }
                 } else { // There is no applicable size (e.g. hats)
-                     // console.log('item no sizes');
                     csv += item.name + ',Number,';
                 }
             }
@@ -65,13 +82,9 @@ router.all('/', function(req, res, next) {
                 res.redirect('/admin');
                 return;
             }
-            // console.log('docs:', docs);
-            for (var order_index in docs) {
-                var order = docs[order_index];
-                // console.log('order:', order); 
+            for (var order of docs) {
                 csv += order.player_name + ',';
-                for (var item_index in order.items) {
-                    var item = order.items[item_index]; 
+                for (var item of order.items) {
                     if (item.quantity == 0) {
                         csv += ',,';
                     } else {
@@ -80,7 +93,6 @@ router.all('/', function(req, res, next) {
                 }
                 csv += '\n';
             }
-            console.log('csv:', csv);
             var fileName = './data_' + req.sessionId;
             fs.writeFile(fileName, csv, function(err) {
                 if (err) {
@@ -102,13 +114,6 @@ router.all('/', function(req, res, next) {
 
     });
     
-    // Save the string to disk
-
-
-    // Send the file to the user
-
-
-    // Delete the file from disk
 });
 
 module.exports = router;
