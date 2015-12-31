@@ -12,12 +12,12 @@ router.all('/', function(req, res, next) {
     }
     var order = {form_name: req.body['form-name'], items: []};
     var item_num = -1;
+    console.log('req.body:', req.body);
     for (var key in req.body) {
         if (key.indexOf('name') === 0) {
             order.player_name = req.body[key]; 
         } else if (key.indexOf('quantity') === 0) {
-            // if (req.body[key] == 0) continue; // Skip order with quantity === 0
-            var name = key.substring(key.indexOf('-') + 1);
+            var name = key.substring(key.indexOf('-') + 1).split('_').join(' ');
             var quantity = req.body[key];
             var item = {'name': name, 'quantity': quantity, numbers: []};
             order.items.push(item);

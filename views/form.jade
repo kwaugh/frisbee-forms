@@ -13,6 +13,7 @@ block content
         input(type='hidden' value='#{form.name}' name='form-name')
         each item in form.items
             h3 #{item.name}
+            - var sanitized_name = item.name.split(' ').join('_')
             each size in item.sizes
                 .size
                     .hidden.item-name #{item.name}-#{size}
@@ -23,22 +24,23 @@ block content
                         if order.items
                             each order_item in order.items
                                 if order_item.name === item.name + '-' + size
-                                    input.form-control.quantity(type='number' name='quantity-#{item.name}-#{size}' min='0' max='10', value='#{order_item.quantity}')
+                                    input.form-control.quantity(type='number' name='quantity-#{sanitized_name}-#{size}' min='0' max='10', value='#{order_item.quantity}')
                                     - var count = 1
                                     each number in order_item.numbers
                                         .form-group.col-xs-offset-1.number
                                             if count === 1
                                                 br
                                             label Number:
-                                            input.form-control(type='number' name='number-#{item.name}-#{size}-#{count}' value='#{number}' placeholder='Number')
+                                            input.form-control(type='number' name='number-#{sanitized_name}-#{size}-#{count}' value='#{number}' placeholder='Number')
                                             - count++
                                     - found_item = true
 
                         unless found_item
-                            input.form-control.quantity(type='number' name='quantity-#{item.name}-#{size}' min='0' max='10', value='0')
+                            input.form-control.quantity(type='number' name='quantity-#{sanitized_name}-#{size}' min='0' max='10', value='0')
             each subitem in item.subitems
                 hr
                 h4 #{subitem.name}
+                - var sanitized_subitem_name = subitem.name.split(' ').join('_')
                 .form-group
                     each size in subitem.sizes
                         .size
@@ -50,17 +52,17 @@ block content
                                 if order.items
                                     each order_item in order.items
                                         if order_item.name === subitem.name + '-' + size
-                                            input.form-control.quantity(type='number' name='quantity-#{subitem.name}-#{size}' min='0' max='10', value='#{order_item.quantity}')
+                                            input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='10', value='#{order_item.quantity}')
                                             - var count = 1
                                             each number in order_item.numbers
                                                 .form-group.col-xs-offset-1.number
                                                     if count === 1
                                                         br
                                                     label Number:
-                                                    input.form-control(type='number' name='number-#{item.name}-#{size}-#{count}' value='#{number}' placeholder='Number')
+                                                    input.form-control(type='number' name='number-#{sanitized_subitem_name}-#{size}-#{count}' value='#{number}' placeholder='Number')
                                                     - count++
                                             - found_sub_item = true
 
                                 unless found_sub_item
-                                    input.form-control.quantity(type='number' name='quantity-#{subitem.name}-#{size}' min='0' max='10' value='0')
+                                    input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='10' value='0')
         button.btn.btn-primary(type='submit') Submit
