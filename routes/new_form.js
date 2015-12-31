@@ -30,6 +30,8 @@ router.all('/', function(req, res, next) {
             form.items[current_item_num].sizes = [].concat(req.body[key]);
         } else if (key.indexOf('subitem-size') === 0) {
             form.items[current_item_num].subitems[form.items[current_item_num].subitems.length - 1].sizes = [].concat(req.body[key]); 
+        } else if (key.indexOf('close-datetime') === 0) { // The closing datetime
+            form.date = new Date(req.body[key]);
         }
     }
     console.log('form:', JSON.stringify(form));

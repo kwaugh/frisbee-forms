@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var orders = DB.collection('orders');
+var forms = DB.collection('forms');
 
 /* Page to validate user form submissions */
 router.all('/', function(req, res, next) {
@@ -27,15 +28,28 @@ router.all('/', function(req, res, next) {
         }
     }
     console.log('order:', order);
-    orders.findOne({player_name: order.player_name}, function(err, doc) {
-        if (!err && doc) {
-            orders.remove(doc);
+    forms.findOne({name: order.form_name}, function(err, doc) {
+        if (err || !doc) {
+            res.redirect('/');
+            return;
         }
-        orders.save(order);
-    });
+        var close_date = new Date(doc.date);
+        // The form is closed
+        if (Date.now() > close_date) {
+            res.redirect('/');
+            return;
+        }
+        orders.findOne({player_name: order.player_name}, function(err, doc) {
+            if (!err && doc) {
+                orders.remove(doc);
+            }
+            orders.save(order);
+        });
 
-    /* Take them back to the done message page */
-    res.redirect('/submitted');
+        /* Take them back to the done message page */
+        res.redirect('/submitted');
+
+    });
 });
 
 module.exports = router;

@@ -14,7 +14,9 @@ router.all('/', function(req, res, next) {
             if (err || !doc || doc.length === {}) {
                 res.redirect('/admin');
             } else {
-                res.render('edit_form', {form: doc});
+                var closing_date = new Date(doc.date);
+                closing_date = convertToHTMLDate(closing_date)
+                res.render('edit_form', {form: doc, close: closing_date, min_date: convertToHTMLDate(Date.now())});
             }
             
         });
@@ -25,5 +27,13 @@ router.all('/', function(req, res, next) {
         });
     }
 });
+
+function convertToHTMLDate(date) {
+    var closing_date = new Date(date);
+    var string_date = closing_date.toISOString();
+    // Give HTML the formatting it expects
+    return string_date.substring(0, string_date.lastIndexOf(':'));
+
+}
 
 module.exports = router;

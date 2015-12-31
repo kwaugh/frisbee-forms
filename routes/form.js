@@ -37,14 +37,16 @@ router.all('/', function(req, res, next) {
             res.redirect('/');
             return;
         }
+        var close_date = new Date(docs.date);
+        console.log('form.date:', docs.date);
+        console.log('close_date:', close_date);
+        var can_submit = Date.now() < close_date ? true : false;
         orders.findOne({player_name: name, form_name: form}, function(err, doc) {
             console.log('doc:', doc);
             if (err || !doc) {
-                res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, order: {}});
-            } else {
-                console.log('I found a previous order');
-                res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, order: doc});
+                doc = {};
             }
+            res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, order: doc, 'can_submit': can_submit, 'close_date': close_date.toDateString()});
         });
     });
     

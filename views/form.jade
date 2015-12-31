@@ -6,6 +6,7 @@ block header
 
 block content
     h1= title
+    h3.text-warning Orders Close on #{close_date}
     hr
     input#default-number(type='hidden' value='#{default_number}')
     form(method='post' action='form_submit')
@@ -65,4 +66,8 @@ block content
 
                                 unless found_sub_item
                                     input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='10' value='0')
-        button.btn.btn-primary(type='submit') Submit
+        if can_submit
+            button.btn.btn-primary(type='submit') Submit
+        else
+            p.text-danger This form is closed. You may not submit an order. 
+            button.btn.btn-primary(type='submit' disabled) Submit

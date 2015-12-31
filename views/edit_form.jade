@@ -36,6 +36,9 @@ block content
         .form-group
             label Form Name:
             input.form-control(type='text' name='form-name' placeholder='Name' value='#{form.name}' required)
+        .form-group
+            label Close Date:
+            input.form-control(type='datetime-local' name='close-datetime' value='#{close}' min='#{min_date}' required)
         hr
         - var item_num = -1
         - var subitem_num = -1
