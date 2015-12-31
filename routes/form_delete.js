@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var forms = DB.collection('forms');
+var orders = DB.collection('orders');
 
 /* Delete the specified form */
 router.all('/', function(req, res, next) {
@@ -16,6 +17,8 @@ router.all('/', function(req, res, next) {
         return;
     }
     forms.remove({name: form});
+    orders.remove({form_name: form});
+
     res.redirect('/admin');
 });
 
