@@ -23,7 +23,11 @@ block content
                 - index++
         .form-group.text-muted OR
         .form-group
-            input.form-control#textbox-name(type='text' name='textbox-name' placeholder='Name')
+            label First Name:
+            input.form-control.textbox-name(type='text' name='textbox-firstname' placeholder='First Name')
+        .form-group
+            label Last Name:
+            input.form-control.textbox-name(type='text' name='textbox-lastname' placeholder='Last Name')
         .form-group
             label Default Jersey Number:
             input.form-control(type='number' min='0' max='99' name='default-jersey-number' id='default-jersey-number' placeholder='Number' required)
