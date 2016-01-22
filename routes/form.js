@@ -8,9 +8,9 @@ var orders = DB.collection('orders');
 /* User page for filling out forms */
 router.all('/', function(req, res, next) {
     var form = req.body['form'];
-    var textbox_firstname = req.body['textbox-firstname'];
-    var textbox_lastname = req.body['textbox-lastname'];
-    var textbox_name = textbox_firstname.trim() + ' ' + textbox_lastname.trim();
+    var textbox_firstname = req.body['textbox-firstname'] ? req.body['textbox-firstname'].trim() : '';
+    var textbox_lastname = req.body['textbox-lastname'] ? req.body['textbox-lastname'].trim() : '';
+    var textbox_name = textbox_firstname + ' ' + textbox_lastname;
     var select_name = req.body['select-name']
     var jersey_number = req.body['default-jersey-number'];
     if (!isValidForm(form, textbox_name, select_name, jersey_number)) {
