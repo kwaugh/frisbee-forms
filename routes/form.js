@@ -11,8 +11,9 @@ router.all('/', function(req, res, next) {
     var textbox_firstname = req.body['textbox-firstname'] ? req.body['textbox-firstname'].trim() : '';
     var textbox_lastname = req.body['textbox-lastname'] ? req.body['textbox-lastname'].trim() : '';
     var textbox_name = textbox_firstname + ' ' + textbox_lastname;
-    var select_name = req.body['select-name']
+    var select_name = req.body['select-name'];
     var jersey_number = req.body['default-jersey-number'];
+    var team = req.body['team'];
     if (!isValidForm(form, textbox_name, select_name, jersey_number)) {
         res.redirect('/');
         return;
@@ -25,13 +26,13 @@ router.all('/', function(req, res, next) {
         name = textbox_name;
     }
     name = name.trim();
-    // Add jersey number to player name
+    // Add jersey number and team to player name
     names.findOne({'name': name}, function(err, doc) {
         if ((err || !doc || doc === '') && name !== '') {
             // Save their preferred number
-            names.save({'name': name, 'number': jersey_number});
+            names.save({'name': name, 'number': jersey_number, 'team': team});
         } else {
-            names.update(doc, {'name': name, 'number': jersey_number});
+            names.update(doc, {'name': name, 'number': jersey_number, 'team': team});
         }
     });
     forms.findOne({name: form}, function(err, docs) {

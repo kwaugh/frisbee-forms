@@ -10,6 +10,12 @@ $(function() {
             index = index.substring(0, index.indexOf('-')); // Remove 'name'
             console.log('index:', index);
             $('#default-jersey-number').val($('#' + index + '-number').text());
+            var team =  $('#select-name option:selected').attr('team');
+            console.log(team);
+            if (typeof team !== 'undefined' && team !== 'undefined') {
+                $('#team').val(team);            
+            }
+
         } else {
             $('.textbox-name').prop('disabled', false); 
             $("#default-jersey-number").val('');

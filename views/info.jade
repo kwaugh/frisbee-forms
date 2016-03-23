@@ -15,7 +15,7 @@ block content
                 option(selected) Custom
                 - var index = 0
                 each name in names
-                    option(value='#{name.name}' id='#{index}-name') #{name.name}
+                    option(value='#{name.name}' id='#{index}-name' team='#{name.team}') #{name.name}
                     - index++
             - var index = 0
             each name in names
@@ -31,5 +31,13 @@ block content
         .form-group
             label Default Jersey Number:
             input.form-control(type='number' min='0' max='99' name='default-jersey-number' id='default-jersey-number' placeholder='Number' required)
+        .form-group
+            label Team:
+            select.form-control#team(name='team' required)
+                option#Other(value='Other' selected) Other
+                option#TUFF(value='TUFF') TUFF
+                option#Graze(value='Graze') Graze
+                option#Melee(value='Melee') Melee
+                option#Mayhem(value='Mayhem') Mayhem
         .form-group
             button.btn.btn-default(type='submit') Submit
