@@ -15,7 +15,7 @@ block content
                 option(selected) Custom
                 - var index = 0
                 each name in names
-                    option(value='#{name.name}' id='#{index}-name' team='#{name.team}') #{name.name}
+                    option(value='#{name.name}' id='#{index}-name' team='#{name.team}' phone='#{name.phone}' email='#{name.email}') #{name.name}
                     - index++
             - var index = 0
             each name in names
@@ -39,5 +39,11 @@ block content
                 option#Graze(value='Graze') Graze
                 option#Melee(value='Melee') Melee
                 option#Mayhem(value='Mayhem') Mayhem
+        .form-group
+            label Phone Number:
+            input.form-control#phone(type='number' min='0' max='9999999999' name='phone' placeholder='Phone' required)
+        .form-group
+            label Email Address:
+            input.form-control#email(type='email' name='email' placeholder='Email' required)
         .form-group
             button.btn.btn-default(type='submit') Submit

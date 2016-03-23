@@ -14,7 +14,10 @@ router.all('/', function(req, res, next) {
     var select_name = req.body['select-name'];
     var jersey_number = req.body['default-jersey-number'];
     var team = req.body['team'];
-    if (!isValidForm(form, textbox_name, select_name, jersey_number)) {
+    var phone = req.body['phone'];
+    var email = req.body['email'];
+    console.log('email:', email);
+    if (!isValidForm(form, textbox_name, select_name, jersey_number, team, phone, email)) {
         res.redirect('/');
         return;
     }
@@ -30,9 +33,9 @@ router.all('/', function(req, res, next) {
     names.findOne({'name': name}, function(err, doc) {
         if ((err || !doc || doc === '') && name !== '') {
             // Save their preferred number
-            names.save({'name': name, 'number': jersey_number, 'team': team});
+            names.save({'name': name, 'number': jersey_number, 'team': team, 'phone': phone, 'email': email});
         } else {
-            names.update(doc, {'name': name, 'number': jersey_number, 'team': team});
+            names.update(doc, {'name': name, 'number': jersey_number, 'team': team, 'phone': phone, 'email': email});
         }
     });
     forms.findOne({name: form}, function(err, docs) {
@@ -55,8 +58,8 @@ router.all('/', function(req, res, next) {
     
 });
 
-function isValidForm(form, textbox_name, select_name, jersey_number) {
-    return (form && form !== null && ((textbox_name && textbox_name !== null) || (select_name && select_name !== null)) && jersey_number && jersey_number !== null);
+function isValidForm(form, textbox_name, select_name, jersey_number, team, phone, email) {
+    return (form && form !== null && ((textbox_name && textbox_name !== null) || (select_name && select_name !== null)) && jersey_number && jersey_number !== null && team && team !== null && phone && phone !== null && email && email !== null);
 }
 
 module.exports = router;
