@@ -31,6 +31,8 @@ function updateInput(id) {
     var value =  $('#select-name option:selected').attr(id);
     if (typeof value !== 'undefined' && value !== 'undefined') {
         $('#' + id).val(value);            
+    } else {
+        $('#' + id).val('');            
     }
 
 }
