@@ -1,0 +1,23 @@
+extends layout
+
+block header
+    title Contact Information
+block content
+    h1 Contact Information
+    hr 
+    table.table.table-hover
+        thead
+            tr
+                th Name
+                th Number
+                th Team
+                th Phone Number
+                th Email
+        tbody
+            each contact in contacts
+                tr
+                    td #{contact.name}
+                    td #{contact.number}
+                    td #{contact.team}
+                    td #{contact.phone}
+                    td #{contact.email}

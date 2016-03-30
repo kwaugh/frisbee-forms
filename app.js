@@ -21,6 +21,7 @@ var form_delete_responses = require('./routes/form_delete_responses');
 var submitted   = require('./routes/submitted');
 var select_export = require('./routes/select_export');
 var export_form = require('./routes/export');
+var contact_info = require('./routes/contact_info');
 
 var app = express();
 
@@ -57,6 +58,7 @@ app.use('/form_delete_responses', form_delete_responses);
 app.use('/submitted', submitted);
 app.use('/select_export', select_export);
 app.use('/export', export_form);
+app.use('/contact_info', contact_info);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
