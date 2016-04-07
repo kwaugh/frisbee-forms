@@ -11,7 +11,8 @@ router.all('/', function(req, res, next) {
         res.redirect('/');
         return;
     }
-    var order = {form_name: req.body['form-name'], items: []};
+    var order = {form_name: req.body['form-name'], team: req.body['team'],
+        items: []};
     var item_num = -1;
     console.log('req.body:', req.body);
     for (var key in req.body) {
@@ -27,6 +28,7 @@ router.all('/', function(req, res, next) {
             order.items[item_num].numbers.push(req.body[key]);
         }
     }
+
     console.log('order:', order);
     forms.findOne({name: order.form_name}, function(err, doc) {
         if (err || !doc) {

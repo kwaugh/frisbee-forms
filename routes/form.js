@@ -10,17 +10,19 @@ router.all('/', function(req, res, next) {
     var form = req.body['form'];
     var textbox_firstname = req.body['textbox-firstname'] ? req.body['textbox-firstname'].trim() : '';
     var textbox_lastname = req.body['textbox-lastname'] ? req.body['textbox-lastname'].trim() : '';
-    var textbox_name = textbox_firstname + ' ' + textbox_lastname;
     var select_name = req.body['select-name'];
     var jersey_number = req.body['default-jersey-number'];
     var team = req.body['team'];
     var phone = req.body['phone'];
     var email = req.body['email'];
     console.log('email:', email);
-    if (!isValidForm(form, textbox_name, select_name, jersey_number, team, phone, email)) {
+    if (!isValidForm(form, textbox_firstname, textbox_lastname, select_name, jersey_number, team, phone, email)) {
         res.redirect('/');
         return;
     }
+    var textbox_name = textbox_firstname.charAt(0).toUpperCase() +
+    textbox_firstname.slice(1) + ' ' + textbox_lastname.charAt(0).toUpperCase()
+    + textbox_lastname.slice(1);
     var name = '';
     /* Default to select name if it is filled out */
     if (select_name && select_name !== null && select_name !== 'Custom') {
@@ -52,14 +54,14 @@ router.all('/', function(req, res, next) {
             if (err || !doc) {
                 doc = {};
             }
-            res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, order: doc, 'can_submit': can_submit, 'close_date': close_date.toDateString()});
+            res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, 'team': team, order: doc, 'can_submit': can_submit, 'close_date': close_date.toDateString()});
         });
     });
     
 });
 
-function isValidForm(form, textbox_name, select_name, jersey_number, team, phone, email) {
-    return (form && form !== null && ((textbox_name && textbox_name !== null) || (select_name && select_name !== null)) && jersey_number && jersey_number !== null && team && team !== null && phone && phone !== null && email && email !== null);
+function isValidForm(form, textbox_firstname, textbox_lastname, select_name, jersey_number, team, phone, email) {
+    return (form && form !== null && ((textbox_firstname && textbox_firstname !== null && textbox_lastname && textbox_lastname !== null) || (select_name && select_name !== null)) && jersey_number && jersey_number !== null && team && team !== null && phone && phone !== null && email && email !== null);
 }
 
 module.exports = router;

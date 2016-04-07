@@ -82,7 +82,21 @@ router.all('/', function(req, res, next) {
                 res.redirect('/admin');
                 return;
             }
+            console.log('docs: ', docs);
+            docs.sort(function(a, b) {
+                if (a.team === b.team) {
+                    return a.player_name > b.player_name;
+                }
+                return a.team > b.team;
+            })
+            var last_team_name = '';
             for (var order of docs) {
+                if (order.team !== last_team_name) {
+                    if (last_team_name !== '') {
+                        csv += '\n';
+                    }
+                    last_team_name = order.team;
+                }
                 csv += order.player_name + ',';
                 for (var item of order.items) {
                     if (item.quantity == 0) {

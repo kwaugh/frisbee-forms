@@ -12,6 +12,7 @@ block content
     form(method='post' action='form_submit')
         input(type='hidden' value='#{name}' name='name')
         input(type='hidden' value='#{form.name}' name='form-name')
+        input(type='hidden' value='#{team}' name='team')
         each item in form.items
             h3 #{item.name}
             - var sanitized_name = item.name.split(' ').join('_')
