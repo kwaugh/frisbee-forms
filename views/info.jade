@@ -9,7 +9,7 @@ block content
     p Please input the following information:
     form#index-form(action='form' method='post')
         input(type='hidden' value='#{form}' name='form')
-        .form-group
+        .form-group.col-md-12 
             label Name:
             select.form-control#select-name(name='select-name')
                 option(selected) Custom
@@ -21,17 +21,17 @@ block content
             each name in names
                 .hidden(id='#{index}-number') #{name.number}
                 - index++
-        .form-group.text-muted OR
-        .form-group
+        .form-group.text-muted.col-md-12 OR
+        .form-group.col-md-6
             label First Name:
             input.form-control.textbox-name(type='text' name='textbox-firstname' placeholder='First Name')
-        .form-group
+        .form-group.col-md-6
             label Last Name:
             input.form-control.textbox-name(type='text' name='textbox-lastname' placeholder='Last Name')
-        .form-group
+        .form-group.col-md-6
             label Default Jersey Number:
             input.form-control(type='number' min='0' max='99' name='default-jersey-number' id='default-jersey-number' placeholder='Number' required)
-        .form-group
+        .form-group.col-md-6
             label Team:
             select.form-control#team(name='team' required)
                 option#Other(value='Other' selected) Other
@@ -39,10 +39,10 @@ block content
                 option#Graze(value='Graze') Graze
                 option#Melee(value='Melee') Melee
                 option#Mayhem(value='Mayhem') Mayhem
-        .form-group
+        .form-group.col-md-6
             label Phone Number:
             input.form-control#phone(type='number' min='0' max='9999999999' name='phone' placeholder='Phone' required)
-        .form-group
+        .form-group.col-md-6
             label Email Address:
             input.form-control#email(type='email' name='email' placeholder='Email' required)
         .form-group

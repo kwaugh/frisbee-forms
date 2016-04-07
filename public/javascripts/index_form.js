@@ -8,22 +8,14 @@ $(function() {
             $('.textbox-name').prop('disabled', true); 
             var index =  $('#select-name option:selected').attr('id');
             index = index.substring(0, index.indexOf('-')); // Remove 'name'
-            console.log('index:', index);
             $('#default-jersey-number').val($('#' + index + '-number').text());
-            updateInput('team');
-            updateInput('phone');
-            updateInput('email');
-            /*
-            var team =  $('#select-name option:selected').attr('team');
-            if (typeof team !== 'undefined' && team !== 'undefined') {
-                $('#team').val(team);            
-            }
-            */
-
         } else {
             $('.textbox-name').prop('disabled', false); 
             $("#default-jersey-number").val('');
         }
+        updateInput('team');
+        updateInput('phone');
+        updateInput('email');
     });
 });
 
@@ -34,5 +26,4 @@ function updateInput(id) {
     } else {
         $('#' + id).val('');            
     }
-
 }
