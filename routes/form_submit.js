@@ -41,9 +41,12 @@ router.all('/', function(req, res, next) {
             res.redirect('/');
             return;
         }
-        orders.findOne({player_name: order.player_name}, function(err, doc) {
-            if (!err && doc) {
-                orders.remove(doc);
+        orders.find({player_name: order.player_name}, function(err, docs) {
+            console.log('err:', err);
+            console.log('docs:', docs);
+            if (!err && docs) {
+                console.log('removing the old order');
+                orders.remove({player_name: order.player_name});
             }
             orders.save(order);
         });
