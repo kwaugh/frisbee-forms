@@ -19,7 +19,7 @@ block content
             each size in item.sizes
                 .size
                     .hidden.item-name #{sanitized_name}-#{size}
-                    .form-group
+                    .form-group.col-xs-offset-1
                         label= size
                         // Check to see if the user has already ordered something
                         - var found_item = false
@@ -47,7 +47,7 @@ block content
                     each size in subitem.sizes
                         .size
                             .hidden.item-name #{sanitized_subitem_name}-#{size}
-                            .form-group
+                            .form-group.col-xs-offset-1
                                 label= size
                                 // Check to see if the user has already ordered something
                                 - var found_sub_item = false
