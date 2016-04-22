@@ -85,7 +85,13 @@ router.all('/', function(req, res, next) {
             console.log('docs: ', docs);
             docs.sort(function(a, b) {
                 if (a.team === b.team) {
-                    return a.player_name > b.player_name;
+                    // Sort by last name
+                    // TODO: Store first and last name separately in DB
+                    a_last_name = a.player_name.
+                        substring(a.player_name.indexOf(' ') + 1);
+                    b_last_name = b.player_name.
+                        substring(b.player_name.indexOf(' ') + 1);
+                    return a_last_name > b_last_name;
                 }
                 return a.team > b.team;
             })
