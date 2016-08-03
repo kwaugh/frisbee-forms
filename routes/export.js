@@ -13,11 +13,22 @@ router.all('/', function(req, res, next) {
     }
     var form_name = req.body['form-name'];
     console.log('form-name:', form_name);
-    if (!form_name || form_name === '') {
+    var export_version = req.body['export-version'];
+    var export_handlers = {
+        '1': function() { export_version_1(form_name, req, res, next); },
+        '2': function() { export_version_2(form_name, req, res, next); }
+    };
+    if (!form_name || form_name === '' || !export_version ||
+        !(export_version in export_handlers))
+    {
         res.redirect('/admin');
         return;
     }
+    console.log('export_version', export_version);
+    export_handlers[export_version]();
+});
 
+function export_version_1(form_name, req, res, next) {
     // Build the CSV string
     forms.findOne({'name': form_name}, function(err, doc) {
         if (err || !doc) {
@@ -133,7 +144,126 @@ router.all('/', function(req, res, next) {
         });
 
     });
-    
-});
+
+}
+
+function export_version_2(form_name, req, res, next) {
+    console.log('in export_version_2');
+    // Build the CSV string
+    forms.findOne({'name': form_name}, function(err, doc) {
+        if (err || !doc) {
+            res.redirect('/admin');
+            return;
+        }
+
+        var csv = '';
+
+        // Build the first row
+        csv += ',Quantity,Numbers\n';
+
+        var aggregated_data = {};
+        for (var item of doc.items) {
+            console.log('item', item);
+            if (item.subitems && item.subitems.length !== 0) { // has subitems
+                for (var subitem of item.subitems) {
+                    console.log('subitem', subitem);
+                    var excel_name = subitem.name + ' ' + item.name;
+                    aggregated_data[excel_name] = {};
+                    for (var size of subitem.sizes) {
+                        aggregated_data[excel_name][size] = {
+                            'quantity': 0,
+                            'numbers': []
+                        };
+                    }
+                }
+            } else { // no subitems
+                aggregated_data[item.name] = {};
+                for (var size of item.sizes) {
+                    aggregated_data[item.name][size] = {
+                        'quantity': 0,
+                        'numbers': []
+                    };
+                }
+            }
+        }
+        console.log('aggregated_data', aggregated_data);
+        // built aggregated_data. time to populate it
+        console.log('\n\n');
+
+        orders.find({'form_name': form_name}, function(err, docs) {
+            // grab the quantity and numbers from each
+            // store in aggregated_data
+            for (var doc of docs) {
+                for (var item of doc.items) {
+                    var split_name = item.name.split('-');
+                    if (split_name.length == 3) { // there are subitems
+                        var main_name = split_name[0];
+                        var sub_name = split_name[1];
+                        var size = split_name[2];
+                        console.log('main_name:', main_name);
+                        console.log('sub_name:', sub_name);
+                        console.log('size:', size);
+
+                        aggregated_data[sub_name + ' ' + main_name][size].quantity += parseInt(item.quantity);
+                        aggregated_data[sub_name + ' ' + main_name][size].numbers = aggregated_data[sub_name + ' ' + main_name][size].numbers.concat(item.numbers);
+                    } else if (split_name.length == 2) { // no subitems
+                        var main_name = split_name[0];
+                        var size = split_name[1];
+                        console.log('main_name:', main_name);
+                        console.log('size:', size);
+
+                        aggregated_data[main_name][size].quantity += parseInt(item.quantity);
+                        aggregated_data[main_name][size].numbers = aggregated_data[main_name][size].numbers.concat(item.numbers);
+                    } else {
+                        console.log('there are hyphens in item names and thats breaking me');
+                    }
+                }
+            }
+            console.log('aggregated_data', aggregated_data);
+            // aggregated data is populated. time to generate csv
+            for (var item in aggregated_data) {
+                if (aggregated_data.hasOwnProperty(item)) {
+                    if (aggregated_data[item].hasOwnProperty('')) { // no sizes for this item
+                        csv += item + ',' + aggregated_data[item][''].quantity + ',';
+                        csv += '"' + aggregated_data[item][''].numbers.sort().toString() + '"';
+                        csv += '\n';
+                    } else { // there are sizes
+                        csv += item + '\n';
+                        for (var size in aggregated_data[item]) {
+                            if (aggregated_data[item].hasOwnProperty(size)) {
+                                csv += size + ',';
+                                csv += aggregated_data[item][size].quantity + ',';
+                                csv += '"' + aggregated_data[item][size].numbers.sort().toString() + '"';
+                                csv += '\n';
+                            }
+                        }
+                    }
+                }
+            }
+            console.log('csv:', csv);
+
+            // download the new file
+            var fileName = './data_' + req.sessionId;
+            fs.writeFile(fileName, csv, function(err) {
+                if (err) {
+                    console.log('Couldnt save the file');
+                }
+                res.download(fileName, form_name + '.csv', function(err) {
+                    if (err) {
+                        console.log('Error downloading the file');
+                    }
+                    // Delete the file
+                    fs.unlink(fileName, function(err) {
+                        if (err) {
+                            console.log('Error when deleting the file');
+                        }
+                    });
+                });
+            });
+        });
+
+    });
+
+}
 
 module.exports = router;

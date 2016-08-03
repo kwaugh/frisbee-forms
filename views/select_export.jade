@@ -12,5 +12,10 @@ block content
             select.form-control(name='form-name')
                 each form in forms
                     option(value='#{form.name}') #{form.name}
+            br
+            label Export Version:
+            select.form-control(name='export-version')
+                option(value='1') 1
+                option(value='2') 2
         .form-group
             button.btn.btn-primary(type='submit') Submit
