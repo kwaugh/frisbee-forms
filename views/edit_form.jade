@@ -31,6 +31,9 @@ block content
                             input(type='hidden' name='form-name' value='#{form.name}')
                             input.btn.btn-danger.center-block(type='submit' name='submit' value='Delete')
 
+    div.alert.alert-danger
+        strong Warning!
+        span &nbsp Do not include hyphens in any of the item names!
     hr
     form(method='post' action='new_form')
         .form-group

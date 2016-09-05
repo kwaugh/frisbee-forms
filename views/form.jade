@@ -26,7 +26,7 @@ block content
                         if order.items
                             each order_item in order.items
                                 if order_item.name === item.name + '-' + size
-                                    input.form-control.quantity(type='number' name='quantity-#{sanitized_name}-#{size}' min='0' max='10', value='#{order_item.quantity}')
+                                    input.form-control.quantity(type='number' name='quantity-#{sanitized_name}-#{size}' min='0' max='20', value='#{order_item.quantity}')
                                     - var count = 1
                                     each number in order_item.numbers
                                         .form-group.col-xs-offset-1.number
@@ -38,7 +38,7 @@ block content
                                     - found_item = true
 
                         unless found_item
-                            input.form-control.quantity(type='number' name='quantity-#{sanitized_name}-#{size}' min='0' max='10', value='0')
+                            input.form-control.quantity(type='number' name='quantity-#{sanitized_name}-#{size}' min='0' max='20', value='0')
             each subitem in item.subitems
                 hr
                 h4 #{subitem.name}
@@ -54,7 +54,7 @@ block content
                                 if order.items
                                     each order_item in order.items
                                         if order_item.name === item.name + '-' + subitem.name + '-' + size
-                                            input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='10', value='#{order_item.quantity}')
+                                            input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='20', value='#{order_item.quantity}')
                                             - var count = 1
                                             each number in order_item.numbers
                                                 .form-group.col-xs-offset-1.number
@@ -66,7 +66,7 @@ block content
                                             - found_sub_item = true
 
                                 unless found_sub_item
-                                    input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='10' value='0')
+                                    input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='20' value='0')
         if can_submit
             button.btn.btn-primary(type='submit') Submit
         else
