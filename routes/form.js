@@ -8,15 +8,18 @@ var orders = DB.collection('orders');
 /* User page for filling out forms */
 router.all('/', function(req, res, next) {
     var form = req.body['form'];
-    var textbox_firstname = req.body['textbox-firstname'] ? req.body['textbox-firstname'].trim() : '';
-    var textbox_lastname = req.body['textbox-lastname'] ? req.body['textbox-lastname'].trim() : '';
+    var textbox_firstname = req.body['textbox-firstname'] ?
+        req.body['textbox-firstname'].trim() : '';
+    var textbox_lastname = req.body['textbox-lastname'] ?
+        req.body['textbox-lastname'].trim() : '';
     var select_name = req.body['select-name'];
     var jersey_number = req.body['default-jersey-number'];
     var team = req.body['team'];
     var phone = req.body['phone'];
     var email = req.body['email'];
     console.log('email:', email);
-    if (!isValidForm(form, textbox_firstname, textbox_lastname, select_name, jersey_number, team, phone, email)) {
+    if (!isValidForm(form, textbox_firstname, textbox_lastname, select_name,
+            jersey_number, team, phone, email)) {
         res.redirect('/');
         return;
     }
@@ -35,9 +38,21 @@ router.all('/', function(req, res, next) {
     names.findOne({'name': name}, function(err, doc) {
         if ((err || !doc || doc === '') && name !== '') {
             // Save their preferred number
-            names.save({'name': name, 'number': jersey_number, 'team': team, 'phone': phone, 'email': email});
+            names.save({
+                'name': name,
+                'number': jersey_number,
+                'team': team,
+                'phone': phone,
+                'email': email
+            });
         } else {
-            names.update(doc, {'name': name, 'number': jersey_number, 'team': team, 'phone': phone, 'email': email});
+            names.update(doc, {
+                'name': name,
+                'number': jersey_number,
+                'team': team,
+                'phone': phone,
+                'email': email
+            });
         }
     });
     forms.findOne({name: form}, function(err, docs) {
@@ -49,19 +64,37 @@ router.all('/', function(req, res, next) {
         console.log('form.date:', docs.date);
         console.log('close_date:', close_date);
         var can_submit = Date.now() < close_date ? true : false;
-        orders.findOne({player_name: name, form_name: form}, function(err, doc) {
+        orders.findOne({player_name: name, form_name: form}, function(err, doc){
             console.log('doc:', doc);
             if (err || !doc) {
                 doc = {};
             }
-            res.render('form', { title: docs.name + ' Order Form', form: docs, default_number: jersey_number, 'name': name, 'team': team, order: doc, 'can_submit': can_submit, 'close_date': close_date.toDateString()});
+            res.render('form', {
+                title: docs.name + ' Order Form',
+                form: docs,
+                default_number: jersey_number,
+                'name': name,
+                'team': team,
+                order: doc,
+                'can_submit':
+                can_submit,
+                'close_date': close_date.toDateString()
+            });
         });
     });
     
 });
 
-function isValidForm(form, textbox_firstname, textbox_lastname, select_name, jersey_number, team, phone, email) {
-    return (form && form !== null && ((textbox_firstname && textbox_firstname !== null && textbox_lastname && textbox_lastname !== null) || (select_name && select_name !== null)) && jersey_number && jersey_number !== null && team && team !== null && phone && phone !== null && email && email !== null);
+function isValidForm(form, textbox_firstname, textbox_lastname, select_name,
+        jersey_number, team, phone, email) {
+    return (form && form !== null && ((
+            textbox_firstname && textbox_firstname !== null &&
+            textbox_lastname && textbox_lastname !== null) ||
+            (select_name && select_name !== null)) &&
+            jersey_number && jersey_number !== null &&
+            team && team !== null &&
+            phone && phone !== null &&
+            email && email !== null);
 }
 
 module.exports = router;
