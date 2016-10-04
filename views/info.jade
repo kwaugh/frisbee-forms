@@ -6,6 +6,9 @@ block header
 
 block content
     h1 Information
+    p
+        span.note Note:&nbsp
+        span Select your name from the dropdown and resubmit the form to edit your order. Your old order will be overwritten.
     p Please input the following information:
     form#index-form(action='form' method='post')
         input(type='hidden' value='#{form}' name='form')
