@@ -93,9 +93,8 @@ function export_version_1(form_name, req, res, next) {
                 res.redirect('/admin');
                 return;
             }
-            console.log('docs: ', docs);
             docs.sort(function(a, b) {
-                if (a.team === b.team) {
+                if (a.team == b.team) {
                     // Sort by last name
                     // TODO: Store first and last name separately in DB
                     a_last_name = a.player_name.
@@ -105,7 +104,7 @@ function export_version_1(form_name, req, res, next) {
                     return a_last_name > b_last_name;
                 }
                 return a.team > b.team;
-            })
+            });
             var last_team_name = '';
             for (var order of docs) {
                 if (order.team !== last_team_name) {
