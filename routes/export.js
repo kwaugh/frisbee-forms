@@ -101,9 +101,19 @@ function export_version_1(form_name, req, res, next) {
                         substring(a.player_name.indexOf(' ') + 1);
                     b_last_name = b.player_name.
                         substring(b.player_name.indexOf(' ') + 1);
-                    return a_last_name > b_last_name;
+                    if (a_last_name > b_last_name) {
+                        return 1;
+                    } else if (a_last_name < b_last_name) {
+                        return -1;
+                    }
+                    return 0;
                 }
-                return a.team > b.team;
+                if (a.team > b.team) {
+                    return 1;
+                } else if (a.team < b.team) {
+                    return -1;
+                }
+                return 0;
             });
             var last_team_name = '';
             for (var order of docs) {
