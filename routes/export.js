@@ -203,7 +203,8 @@ function export_version_2(form_name, req, res, next) {
                         console.log('sub_name:', sub_name);
                         console.log('size:', size);
 
-                        aggregated_data[sub_name + ' ' + main_name][size].quantity += parseInt(item.quantity);
+                        var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
+                        aggregated_data[sub_name + ' ' + main_name][size].quantity += sanitized_quantity;
                         aggregated_data[sub_name + ' ' + main_name][size].numbers = aggregated_data[sub_name + ' ' + main_name][size].numbers.concat(item.numbers);
                     } else if (split_name.length == 2) { // no subitems
                         var main_name = split_name[0];
@@ -211,7 +212,8 @@ function export_version_2(form_name, req, res, next) {
                         console.log('main_name:', main_name);
                         console.log('size:', size);
 
-                        aggregated_data[main_name][size].quantity += parseInt(item.quantity);
+                        var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
+                        aggregated_data[main_name][size].quantity += sanitized_quantity;
                         aggregated_data[main_name][size].numbers = aggregated_data[main_name][size].numbers.concat(item.numbers);
                     } else {
                         console.log('there are hyphens in item names and thats breaking me');
