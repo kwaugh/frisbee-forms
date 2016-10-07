@@ -11,6 +11,13 @@ router.all('/', function(req, res, next) {
     }
 
     names.find({}, function(err, doc) {
+        doc.sort(function(a, b) {
+            if (a.name > b.name)
+                return 1;
+            else if (a.name < b.name)
+                return -1;
+            return 0;
+        });
         res.render('info', {'form': form, 'names': doc});
     });
 
