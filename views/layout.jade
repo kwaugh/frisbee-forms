@@ -4,9 +4,9 @@ html
         link(rel='stylesheet' href='/stylesheets/bootstrap.min.css')
         link(rel='stylesheet' href='/stylesheets/sticky-footer.css')
         link(rel='stylesheet' href='/stylesheets/style.css')
-        script(src='javascripts/jquery.min.js')
-        script(src='javascripts/bootstrap.min.js')
-        script(src="js-webshim/minified/polyfiller.js")
+        script(src='/javascripts/jquery.min.js')
+        script(src='/javascripts/bootstrap.min.js')
+        script(src="/js-webshim/minified/polyfiller.js")
         script.
             webshim.activeLang('en');
             webshims.polyfill('forms');
@@ -28,8 +28,3 @@ html
             block content
 
         footer.footer
-            .container
-                .text-muted
-                    span.pull-right
-                        img(src='images/TexasUltimateLogoWhite.png' width=35)
-
