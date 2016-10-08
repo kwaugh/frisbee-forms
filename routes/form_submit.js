@@ -6,7 +6,6 @@ var forms = DB.collection('forms');
 
 /* Page to validate user form submissions */
 router.all('/', function(req, res, next) {
-    console.log('req.body:', req.body);
     if (!req.body['form-name']) {
         res.redirect('/');
         return;
@@ -14,7 +13,6 @@ router.all('/', function(req, res, next) {
     var order = {form_name: req.body['form-name'], team: req.body['team'],
         items: []};
     var item_num = -1;
-    console.log('req.body:', req.body);
     for (var key in req.body) {
         if (key.indexOf('name') === 0) {
             order.player_name = req.body[key]; 
@@ -29,7 +27,6 @@ router.all('/', function(req, res, next) {
         }
     }
 
-    console.log('order:', order);
     forms.findOne({name: order.form_name}, function(err, doc) {
         if (err || !doc) {
             res.redirect('/');
@@ -42,10 +39,7 @@ router.all('/', function(req, res, next) {
             return;
         }
         orders.find({player_name: order.player_name}, function(err, docs) {
-            console.log('err:', err);
-            console.log('docs:', docs);
             if (!err && docs) {
-                console.log('removing the old order');
                 orders.remove({player_name: order.player_name});
             }
             orders.save(order);

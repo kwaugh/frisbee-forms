@@ -12,7 +12,6 @@ router.all('/', function(req, res, next) {
         return;
     }
     var form_name = req.body['form-name'];
-    console.log('form-name:', form_name);
     var export_version = req.body['export-version'];
     var export_handlers = {
         '1': function() { export_version_1(form_name, req, res, next); },
@@ -24,7 +23,6 @@ router.all('/', function(req, res, next) {
         res.redirect('/admin');
         return;
     }
-    console.log('export_version', export_version);
     export_handlers[export_version]();
 });
 
@@ -157,7 +155,6 @@ function export_version_1(form_name, req, res, next) {
 }
 
 function export_version_2(form_name, req, res, next) {
-    console.log('in export_version_2');
     // Build the CSV string
     forms.findOne({'name': form_name}, function(err, doc) {
         if (err || !doc) {
@@ -172,10 +169,8 @@ function export_version_2(form_name, req, res, next) {
 
         var aggregated_data = {};
         for (var item of doc.items) {
-            console.log('item', item);
             if (item.subitems && item.subitems.length !== 0) { // has subitems
                 for (var subitem of item.subitems) {
-                    console.log('subitem', subitem);
                     var excel_name = subitem.name + ' ' + item.name;
                     aggregated_data[excel_name] = {};
                     for (var size of subitem.sizes) {
@@ -195,9 +190,7 @@ function export_version_2(form_name, req, res, next) {
                 }
             }
         }
-        console.log('aggregated_data', aggregated_data);
         // built aggregated_data. time to populate it
-        console.log('\n\n');
 
         orders.find({'form_name': form_name}, function(err, docs) {
             // grab the quantity and numbers from each
@@ -209,9 +202,6 @@ function export_version_2(form_name, req, res, next) {
                         var main_name = split_name[0];
                         var sub_name = split_name[1];
                         var size = split_name[2];
-                        console.log('main_name:', main_name);
-                        console.log('sub_name:', sub_name);
-                        console.log('size:', size);
 
                         var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
                         aggregated_data[sub_name + ' ' + main_name][size].quantity += sanitized_quantity;
@@ -219,18 +209,14 @@ function export_version_2(form_name, req, res, next) {
                     } else if (split_name.length == 2) { // no subitems
                         var main_name = split_name[0];
                         var size = split_name[1];
-                        console.log('main_name:', main_name);
-                        console.log('size:', size);
 
                         var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
                         aggregated_data[main_name][size].quantity += sanitized_quantity;
                         aggregated_data[main_name][size].numbers = aggregated_data[main_name][size].numbers.concat(item.numbers);
                     } else {
-                        console.log('there are hyphens in item names and thats breaking me');
                     }
                 }
             }
-            console.log('aggregated_data', aggregated_data);
             // aggregated data is populated. time to generate csv
             for (var item in aggregated_data) {
                 if (aggregated_data.hasOwnProperty(item)) {
@@ -251,7 +237,6 @@ function export_version_2(form_name, req, res, next) {
                     }
                 }
             }
-            console.log('csv:', csv);
 
             // download the new file
             var fileName = './data_' + req.sessionId;

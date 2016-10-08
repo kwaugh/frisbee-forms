@@ -17,7 +17,6 @@ router.all('/', function(req, res, next) {
     var team = req.body['team'];
     var phone = req.body['phone'];
     var email = req.body['email'];
-    console.log('email:', email);
     if (!isValidForm(form, textbox_firstname, textbox_lastname, select_name,
             jersey_number, team, phone, email)) {
         res.redirect('/');
@@ -61,11 +60,8 @@ router.all('/', function(req, res, next) {
             return;
         }
         var close_date = new Date(docs.date);
-        console.log('form.date:', docs.date);
-        console.log('close_date:', close_date);
         var can_submit = Date.now() < close_date ? true : false;
         orders.findOne({player_name: name, form_name: form}, function(err, doc){
-            console.log('doc:', doc);
             if (err || !doc) {
                 doc = {};
             }
