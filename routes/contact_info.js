@@ -9,6 +9,13 @@ router.all('/', function(req, res, next) {
         return;
     }
     names.find({}, function(err, docs) {
+        docs.sort(function(a, b) {
+            if (a.name > b.name)
+                return 1;
+            else if (a.name < b.name)
+                return -1;
+            return 1;
+        });
         res.render('contact_info', {'contacts': docs});
     });
 });
