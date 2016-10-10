@@ -26,6 +26,7 @@ router.all('/', function(req, res, next) {
     export_handlers[export_version]();
 });
 
+/* Orders for each person */
 function export_version_1(form_name, req, res, next) {
     // Build the CSV string
     forms.findOne({'name': form_name}, function(err, doc) {
@@ -154,6 +155,7 @@ function export_version_1(form_name, req, res, next) {
 
 }
 
+/* aggregated orders per item */
 function export_version_2(form_name, req, res, next) {
     // Build the CSV string
     forms.findOne({'name': form_name}, function(err, doc) {
@@ -173,6 +175,7 @@ function export_version_2(form_name, req, res, next) {
                 for (var subitem of item.subitems) {
                     var excel_name = subitem.name + ' ' + item.name;
                     aggregated_data[excel_name] = {};
+                    aggregated_data[excel_name].quantity = 0;
                     for (var size of subitem.sizes) {
                         aggregated_data[excel_name][size] = {
                             'quantity': 0,
@@ -182,6 +185,7 @@ function export_version_2(form_name, req, res, next) {
                 }
             } else { // no subitems
                 aggregated_data[item.name] = {};
+                aggregated_data[item.name].quantity = 0;
                 for (var size of item.sizes) {
                     aggregated_data[item.name][size] = {
                         'quantity': 0,
@@ -205,6 +209,7 @@ function export_version_2(form_name, req, res, next) {
 
                         var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
                         aggregated_data[sub_name + ' ' + main_name][size].quantity += sanitized_quantity;
+                        aggregated_data[sub_name + ' ' + main_name].quantity += sanitized_quantity;
                         aggregated_data[sub_name + ' ' + main_name][size].numbers = aggregated_data[sub_name + ' ' + main_name][size].numbers.concat(item.numbers);
                     } else if (split_name.length == 2) { // no subitems
                         var main_name = split_name[0];
@@ -212,6 +217,7 @@ function export_version_2(form_name, req, res, next) {
 
                         var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
                         aggregated_data[main_name][size].quantity += sanitized_quantity;
+                        aggregated_data[main_name].quantity += sanitized_quantity;
                         aggregated_data[main_name][size].numbers = aggregated_data[main_name][size].numbers.concat(item.numbers);
                     } else {
                     }
@@ -227,13 +233,14 @@ function export_version_2(form_name, req, res, next) {
                     } else { // there are sizes
                         csv += item + '\n';
                         for (var size in aggregated_data[item]) {
-                            if (aggregated_data[item].hasOwnProperty(size)) {
+                            if (aggregated_data[item].hasOwnProperty(size) && size !== 'quantity') {
                                 csv += size + ',';
                                 csv += aggregated_data[item][size].quantity + ',';
                                 csv += '"' + aggregated_data[item][size].numbers.sort().toString() + '"';
                                 csv += '\n';
                             }
                         }
+                        csv += 'Total,' + aggregated_data[item].quantity.toString() + '\n';
                     }
                 }
             }
