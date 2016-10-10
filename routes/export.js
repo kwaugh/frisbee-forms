@@ -169,7 +169,7 @@ function export_version_2(form_name, req, res, next) {
         // Build the first row
         csv += ',Quantity,Numbers\n';
 
-        var aggregated_data = {};
+        var aggregated_data = {'quantity': 0};
         for (var item of doc.items) {
             if (item.subitems && item.subitems.length !== 0) { // has subitems
                 for (var subitem of item.subitems) {
@@ -210,6 +210,7 @@ function export_version_2(form_name, req, res, next) {
                         var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
                         aggregated_data[sub_name + ' ' + main_name][size].quantity += sanitized_quantity;
                         aggregated_data[sub_name + ' ' + main_name].quantity += sanitized_quantity;
+                        aggregated_data.quantity += sanitized_quantity;
                         aggregated_data[sub_name + ' ' + main_name][size].numbers = aggregated_data[sub_name + ' ' + main_name][size].numbers.concat(item.numbers);
                     } else if (split_name.length == 2) { // no subitems
                         var main_name = split_name[0];
@@ -218,6 +219,7 @@ function export_version_2(form_name, req, res, next) {
                         var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
                         aggregated_data[main_name][size].quantity += sanitized_quantity;
                         aggregated_data[main_name].quantity += sanitized_quantity;
+                        aggregated_data.quantity += sanitized_quantity;
                         aggregated_data[main_name][size].numbers = aggregated_data[main_name][size].numbers.concat(item.numbers);
                     } else {
                     }
@@ -225,7 +227,7 @@ function export_version_2(form_name, req, res, next) {
             }
             // aggregated data is populated. time to generate csv
             for (var item in aggregated_data) {
-                if (aggregated_data.hasOwnProperty(item)) {
+                if (aggregated_data.hasOwnProperty(item) && item !== 'quantity') {
                     if (aggregated_data[item].hasOwnProperty('')) { // no sizes for this item
                         csv += item + ',' + aggregated_data[item][''].quantity + ',';
                         csv += '"' + aggregated_data[item][''].numbers.sort().toString() + '"';
@@ -244,6 +246,7 @@ function export_version_2(form_name, req, res, next) {
                     }
                 }
             }
+            csv += '\n' + 'Total,' + aggregated_data.quantity + '\n'
 
             // download the new file
             var fileName = './data_' + req.sessionId;
