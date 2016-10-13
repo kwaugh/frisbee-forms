@@ -6,6 +6,7 @@ var forms = DB.collection('forms');
 
 /* Page to validate user form submissions */
 router.all('/', function(req, res, next) {
+    console.log('form submitted: req.body', req.body);
     if (!req.body['form-name']) {
         res.redirect('/');
         return;
@@ -38,9 +39,9 @@ router.all('/', function(req, res, next) {
             res.redirect('/');
             return;
         }
-        orders.find({player_name: order.player_name}, function(err, docs) {
+        orders.find({player_name: order.player_name, form_name: order.form_name}, function(err, docs) {
             if (!err && docs) {
-                orders.remove({player_name: order.player_name});
+                orders.remove({player_name: order.player_name, form_name: order.form_name});
             }
             orders.save(order);
         });
