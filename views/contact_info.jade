@@ -14,7 +14,16 @@ block content
                 th Phone Number
                 th Email
         tbody
+            - var last_team = ''
             each contact in contacts
+                if last_team !== '' && last_team !== contact.team
+                    tr
+                        td
+                        td
+                        td
+                        td
+                        td
+                - last_team = contact.team
                 tr
                     td #{contact.name}
                     td #{contact.number}
