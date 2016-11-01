@@ -7,8 +7,14 @@ block header
 block content
     h1= title
     hr
-    p Please select a form: 
+    p Open forms:
     form(method='post' action='info')
-        each form in forms
+        each form in open_forms
+            .form-group
+                button.btn.btn-default(type='submit' value='#{form.name}' name='form') #{form.name}
+    br
+    p Past forms:
+    form(method='post' action='info')
+        each form in closed_forms
             .form-group
                 button.btn.btn-default(type='submit' value='#{form.name}' name='form') #{form.name}
