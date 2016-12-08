@@ -17,8 +17,13 @@ block content
         .form-group
             label Close Date:
             input.form-control(type='datetime-local' name='close-datetime' required)
+        .form-group
+            label Is Live:
+            &nbsp
+            input(type='checkbox' name='form-live')
         hr
         .form-group
             button.btn.btn-primary#add-item Add Item
         .form-group
             button.btn.btn-success.btn-block(type='submit') Submit Form
+        input(type='hidden' name='timezone-offset' id='timezone-offset')

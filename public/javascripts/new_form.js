@@ -1,4 +1,10 @@
+function initTimezoneOffset() {
+    var offset = new Date().getTimezoneOffset();
+    $('#timezone-offset').val(offset);
+}
+
 $(function() {
+    initTimezoneOffset();
     var isFirstItem = true;
     var form = $(document).find('form');
 

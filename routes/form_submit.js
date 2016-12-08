@@ -6,7 +6,6 @@ var forms = DB.collection('forms');
 
 /* Page to validate user form submissions */
 router.all('/', function(req, res, next) {
-    console.log('form submitted: req.body', req.body);
     if (!req.body['form-name']) {
         res.redirect('/');
         return;
@@ -35,7 +34,7 @@ router.all('/', function(req, res, next) {
         }
         var close_date = new Date(doc.date);
         // The form is closed
-        if (Date.now() > close_date) {
+        if (Date.now() > close_date || !doc.live) {
             res.redirect('/');
             return;
         }

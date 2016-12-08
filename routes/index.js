@@ -11,6 +11,9 @@ router.get('/', function(req, res, next) {
         var open_forms = [];
         var closed_forms = [];
         for (var i in doc) {
+            if (!doc[i].live) { // only show the live forms
+                continue;
+            }
             if (doc[i].date >= current_date) {
                 open_forms.push(doc[i]);
             } else {

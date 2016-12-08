@@ -42,6 +42,14 @@ block content
         .form-group
             label Close Date:
             input.form-control(type='datetime-local' name='close-datetime' value='#{close}' min='#{min_date}' required)
+            input(type='hidden' name='timezone-offset' id='timezone-offset')
+        .form-group
+            label Is Live:
+            &nbsp
+            if form.live
+                input(type='checkbox' name='form-live' checked)
+            else
+                input(type='checkbox' name='form-live')
         hr
         - var item_num = -1
         - var subitem_num = -1
