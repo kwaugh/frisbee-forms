@@ -10,7 +10,8 @@ router.all('/', function(req, res, next) {
         res.redirect('/');
         return;
     }
-    var order = {form_name: req.body['form-name'], team: req.body['team'],
+    var form_name = req.body['form-name'];
+    var order = {team: req.body['team'],
         items: []};
     var item_num = -1;
     for (var key in req.body) {
@@ -27,7 +28,7 @@ router.all('/', function(req, res, next) {
         }
     }
 
-    forms.findOne({name: order.form_name}, function(err, doc) {
+    forms.findOne({name: form_name}, function(err, doc) {
         if (err || !doc) {
             res.redirect('/');
             return;
@@ -38,10 +39,11 @@ router.all('/', function(req, res, next) {
             res.redirect('/');
             return;
         }
-        orders.find({player_name: order.player_name, form_name: order.form_name}, function(err, docs) {
+        orders.find({player_name: order.player_name, form_id: order.form_id}, function(err, docs) {
             if (!err && docs) {
-                orders.remove({player_name: order.player_name, form_name: order.form_name});
+                orders.remove({player_name: order.player_name, form_id: order.form_id});
             }
+            order.form_id = doc._id;
             orders.save(order);
         });
 

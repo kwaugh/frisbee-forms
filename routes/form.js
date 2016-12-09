@@ -54,26 +54,26 @@ router.all('/', function(req, res, next) {
             });
         }
     });
-    forms.findOne({name: form}, function(err, docs) {
-        if (err || !docs || docs.length === 0) {
+    forms.findOne({name: form}, function(err, doc) {
+        if (err || !doc || doc.length === 0) {
             res.redirect('/');
             return;
         }
-        var close_date = new Date(docs.date);
+        var close_date = new Date(doc.date);
         var can_submit = Date.now() < close_date;
-        orders.findOne({player_name: name, form_name: form}, function(err, doc){
-            if (err || !doc) {
-                doc = {};
+        orders.findOne({player_name: name, form_id: doc._id}, function(err, order){
+            console.log('order:', order);
+            if (err || !order) {
+                order = {};
             }
             res.render('form', {
-                title: docs.name + ' Order Form',
-                form: docs,
-                default_number: jersey_number,
+                'title': doc.name + ' Order Form',
+                'form': doc,
+                'default_number': jersey_number,
                 'name': name,
                 'team': team,
-                order: doc,
-                'can_submit':
-                can_submit,
+                'order': order,
+                'can_submit': can_submit,
                 'close_date': close_date.toString()
             });
         });
