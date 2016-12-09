@@ -8,7 +8,6 @@ router.all('/', function(req, res, next) {
         res.redirect('/admin');
         return;
     }
-    console.log('About to delete');
     orders.remove({form_name: req.body['form-name']});
     res.redirect('/admin');
     return;

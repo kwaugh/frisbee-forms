@@ -6,7 +6,6 @@ var forms = DB.collection('forms');
 /* GET home page. */
 router.get('/', function(req, res, next) {
     forms.find({}, function(err, doc) {
-        /* console.log('doc:', doc); */
         var current_date = new Date();
         var open_forms = [];
         var closed_forms = [];

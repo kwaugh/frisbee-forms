@@ -9,7 +9,6 @@ router.all('/', function(req, res, next) {
         res.redirect('/admin');
         return;
     }
-    console.log('deleting all contacts');
 
     names.remove();
     res.redirect('/contact_info');
