@@ -8,6 +8,7 @@ block content
         // Small modal
         button.btn.btn-danger.pull-right(type='button' data-toggle='modal' data-target='.delete-form') Delete Form
         button.btn.btn-warning.pull-right(type='button' data-toggle='modal' data-target='.delete-responses-form') Delete All Responses
+        button.btn.btn-info.pull-right(type='button' data-toggle='modal' data-target='.clone-form') Clone Form
         div(class='modal fade delete-form' tabindex='-1' role='dialog' aria-labelledby='delete-form')
             div.modal-dialog.modal-sm
                 div.modal-content
@@ -30,6 +31,18 @@ block content
                         form(method='post' action='form_delete_responses')
                             input(type='hidden' name='form-name' value='#{form.name}')
                             input.btn.btn-danger.center-block(type='submit' name='submit' value='Delete')
+        div(class='modal fade clone-form' tabindex='-1' role='dialog' aria-labelledby='clone-form')
+            div.modal-dialog.modal-sm
+                div.modal-content
+                    div.modal-header
+                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                            span(aria-hidden='true') &times;
+                        h4.modal-title.text-center Confirm Clone Form
+                    div.modal-body
+                        form(method='post' action='clone_form')
+                            input(type='hidden' name='form-name' value='#{form.name}')
+                            input.btn.btn-success.center-block(type='submit' name='submit' value='Clone')
+
 
     div.alert.alert-danger
         strong Warning!

@@ -23,6 +23,7 @@ var select_export = require('./routes/select_export');
 var export_form = require('./routes/export');
 var contact_info = require('./routes/contact_info');
 var delete_contacts = require('./routes/delete_all_contacts');
+var clone_form = require('./routes/clone_form');
 
 var app = express();
 
@@ -61,6 +62,7 @@ app.use('/select_export', select_export);
 app.use('/export', export_form);
 app.use('/contact_info', contact_info);
 app.use('/delete_all_contacts', delete_contacts);
+app.use('/clone_form', clone_form);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
