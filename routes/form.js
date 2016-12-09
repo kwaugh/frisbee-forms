@@ -74,7 +74,7 @@ router.all('/', function(req, res, next) {
                 order: doc,
                 'can_submit':
                 can_submit,
-                'close_date': close_date.toDateString()
+                'close_date': close_date.toString()
             });
         });
     });
