@@ -49,6 +49,7 @@ block content
         span &nbsp Do not include hyphens in any of the item names!
     hr
     form(method='post' action='new_form')
+        input(type='hidden' name='form-id' value='#{form_id}')
         .form-group
             label Form Name:
             input.form-control(type='text' name='form-name' placeholder='Name' value='#{form.name}' required)

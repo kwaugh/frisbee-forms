@@ -34,8 +34,8 @@ router.all('/', function(req, res, next) {
     }
     name = name.trim();
     // Add jersey number and team to player name
-    names.findOne({'name': name}, function(err, doc) {
-        if ((err || !doc || doc === '') && name !== '') {
+    names.findOne({'name': name}, function(err, db_form) {
+        if ((err || !db_form || db_form === '') && name !== '') {
             // Save their preferred number
             names.save({
                 'name': name,
@@ -45,7 +45,7 @@ router.all('/', function(req, res, next) {
                 'email': email
             });
         } else {
-            names.update(doc, {
+            names.update(db_form, {
                 'name': name,
                 'number': jersey_number,
                 'team': team,
@@ -54,21 +54,20 @@ router.all('/', function(req, res, next) {
             });
         }
     });
-    forms.findOne({name: form}, function(err, doc) {
-        if (err || !doc || doc.length === 0) {
+    forms.findOne({name: form}, function(err, form) {
+        if (err || !form || form.length === 0) {
             res.redirect('/');
             return;
         }
-        var close_date = new Date(doc.date);
+        var close_date = new Date(form.date);
         var can_submit = Date.now() < close_date;
-        orders.findOne({player_name: name, form_id: doc._id}, function(err, order){
-            console.log('order:', order);
+        orders.findOne({player_name: name, form_id: form._id}, function(err, order){
             if (err || !order) {
                 order = {};
             }
             res.render('form', {
-                'title': doc.name + ' Order Form',
-                'form': doc,
+                'title': form.name + ' Order Form',
+                'form': form,
                 'default_number': jersey_number,
                 'name': name,
                 'team': team,

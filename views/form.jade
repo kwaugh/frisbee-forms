@@ -11,7 +11,7 @@ block content
     input#default-number(type='hidden' value='#{default_number}')
     form(method='post' action='form_submit')
         input(type='hidden' value='#{name}' name='name')
-        input(type='hidden' value='#{form.name}' name='form-name')
+        input(type='hidden' value='#{form._id}' name='form-id')
         input(type='hidden' value='#{team}' name='team')
         each item in form.items
             h3 #{item.name}
@@ -25,20 +25,20 @@ block content
                         - var found_item = false
                         if order.items
                             each order_item in order.items
-                                if order_item.name === item.name + '-' + size
-                                    input.form-control.quantity(type='number' name='quantity-#{sanitized_name}-#{size}' min='0' max='20', value='#{order_item.quantity}')
+                                if (order_item.id.toString() === item.item_id.toString() && order_item.size === size)
+                                    input.form-control.quantity(type='number' name='quantity-#{size}-#{item.item_id}' min='0' max='20', value='#{order_item.quantity}')
                                     - var count = 1
                                     each number in order_item.numbers
                                         .form-group.col-xs-offset-1.number
                                             if count === 1
                                                 br
                                             label Number:
-                                            input.form-control(type='number' name='number-#{sanitized_name}-#{size}-#{count}' value='#{number}' placeholder='Number')
+                                            input.form-control(type='number' name='number-#{size}-#{count}-#{item.item_id}' value='#{number}' placeholder='Number')
                                             - count++
                                     - found_item = true
 
                         unless found_item
-                            input.form-control.quantity(type='number' name='quantity-#{sanitized_name}-#{size}' min='0' max='20', value='0')
+                            input.form-control.quantity(type='number' name='quantity-#{size}-#{item.item_id}' min='0' max='20', value='0')
             each subitem in item.subitems
                 hr
                 h4 #{subitem.name}
@@ -49,24 +49,23 @@ block content
                             .hidden.item-name #{sanitized_subitem_name}-#{size}
                             .form-group.col-xs-offset-1
                                 label= size
-                                // Check to see if the user has already ordered something
                                 - var found_sub_item = false
                                 if order.items
                                     each order_item in order.items
-                                        if order_item.name === item.name + '-' + subitem.name + '-' + size
-                                            input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='20', value='#{order_item.quantity}')
+                                        if (order_item.id.toString() === subitem.subitem_id.toString() && order_item.size === size)
+                                            input.form-control.quantity(type='number' name='quantity-#{size}-#{subitem.subitem_id}' min='0' max='20', value='#{order_item.quantity}')
                                             - var count = 1
                                             each number in order_item.numbers
                                                 .form-group.col-xs-offset-1.number
                                                     if count === 1
                                                         br
                                                     label Number:
-                                                    input.form-control(type='number' name='number-#{sanitized_subitem_name}-#{size}-#{count}' value='#{number}' placeholder='Number')
+                                                    input.form-control(type='number' name='number-#{size}-#{count}-#{subitem.subitem_id}' value='#{number}' placeholder='Number')
                                                     - count++
                                             - found_sub_item = true
 
                                 unless found_sub_item
-                                    input.form-control.quantity(type='number' name='quantity-#{sanitized_subitem_name}-#{size}' min='0' max='20' value='0')
+                                    input.form-control.quantity(type='number' name='quantity-#{size}-#{subitem.subitem_id}' min='0' max='20' value='0')
         if can_submit
             button.btn.btn-primary(type='submit') Submit
         else

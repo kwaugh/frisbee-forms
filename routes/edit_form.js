@@ -16,7 +16,12 @@ router.all('/', function(req, res, next) {
             } else {
                 var closing_date = new Date(doc.date);
                 closing_date = convertToHTMLDate(closing_date, doc.client_date_offset);
-                res.render('edit_form', {form: doc, close: closing_date, min_date: convertToHTMLDate(Date.now())});
+                res.render('edit_form',
+                    {form: doc, close: closing_date,
+                        min_date: convertToHTMLDate(Date.now()),
+                        form_id: doc._id
+                    }
+                );
             }
             
         });

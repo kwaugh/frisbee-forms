@@ -1,26 +1,28 @@
 var express = require('express');
 var router = express.Router();
+var ObjectID = require('mongodb').ObjectID;
 
 var orders = DB.collection('orders');
 var forms = DB.collection('forms');
 
 /* Page to validate user form submissions */
 router.all('/', function(req, res, next) {
-    if (!req.body['form-name']) {
+    if (!req.body['form-id']) {
         res.redirect('/');
         return;
     }
-    var form_name = req.body['form-name'];
-    var order = {team: req.body['team'],
-        items: []};
+    var form_id = req.body['form-id'];
+    var order = {team: req.body['team'], items: []};
     var item_num = -1;
     for (var key in req.body) {
         if (key.indexOf('name') === 0) {
             order.player_name = req.body[key]; 
         } else if (key.indexOf('quantity') === 0) {
-            var name = key.substring(key.indexOf('-') + 1).split('_').join(' ');
+            var id_start_pos = key.indexOf('-', key.indexOf('-') + 1);
+            var id = ObjectID(key.substring(id_start_pos + 1));
+            var size = key.substring(key.indexOf('-') + 1, id_start_pos);
             var quantity = req.body[key];
-            var item = {'name': name, 'quantity': quantity, numbers: []};
+            var item = {'id': id, 'size': size, 'quantity': quantity, numbers: []};
             order.items.push(item);
             item_num++;
         } else if (key.indexOf('number') === 0) {
@@ -28,23 +30,24 @@ router.all('/', function(req, res, next) {
         }
     }
 
-    forms.findOne({name: form_name}, function(err, doc) {
+    forms.findOne({'_id': ObjectID(form_id)}, function(err, doc) {
         if (err || !doc) {
             res.redirect('/');
             return;
         }
-        var close_date = new Date(doc.date);
-        // The form is closed
-        if (Date.now() > close_date || !doc.live) {
-            res.redirect('/');
+        if (Date.now() > new Date(doc.date) || !doc.live) {
+            res.redirect('/'); // the form is closed
             return;
         }
+        order.form_id = doc._id;
         orders.find({player_name: order.player_name, form_id: order.form_id}, function(err, docs) {
             if (!err && docs) {
-                orders.remove({player_name: order.player_name, form_id: order.form_id});
+                orders.remove({player_name: order.player_name, form_id: order.form_id}, function() {
+                    orders.save(order);
+                });
+            } else {
+                orders.save(order);
             }
-            order.form_id = doc._id;
-            orders.save(order);
         });
 
         /* Take them back to the done message page */
