@@ -12,7 +12,7 @@ router.all('/', function(req, res, next) {
         return;
     }
     var form_name = req.body['form-name'];
-    var export_version = req.body['export-ersion'];
+    var export_version = req.body['export-version'];
     var export_handlers = {
         '1': function() { export_version_1(form_name, req, res, next); },
         '2': function() { export_version_2(form_name, req, res, next); }
@@ -87,7 +87,7 @@ function export_version_1(form_name, req, res, next) {
         // Done building the column headers
         csv += '\n';
         
-        orders.find({'form_name': form_name}, function(err, the_orders) {
+        orders.find({'form_id': form._id}, function(err, the_orders) {
             if (err || !the_orders) {
                 res.redirect('/admin');
                 return;
@@ -123,6 +123,7 @@ function export_version_1(form_name, req, res, next) {
                     last_team_name = order.team;
                 }
                 csv += order.player_name + ',';
+                // TODO: fix so that order doesn't matter
                 for (var item of order.items) {
                     if (item.quantity == 0) {
                         csv += ',,';
@@ -132,23 +133,7 @@ function export_version_1(form_name, req, res, next) {
                 }
                 csv += '\n';
             }
-            var fileName = './data_' + req.sessionId;
-            fs.writeFile(fileName, csv, function(err) {
-                if (err) {
-                    console.log('Couldnt save the file');
-                }
-                res.download(fileName, form_name + '.csv', function(err) {
-                    if (err) {
-                        console.log('Error downloading the file');
-                    }
-                    // Delete the file
-                    fs.unlink(fileName, function(err) {
-                        if (err) {
-                            console.log('Error when deleting the file');
-                        }
-                    });
-                });
-            });
+            saveFile('./data_' + req.sessionId, form_name, csv, res);
         });
 
     });
@@ -169,25 +154,26 @@ function export_version_2(form_name, req, res, next) {
         // Build the first row
         csv += ',Quantity,Numbers\n';
 
+        var id_to_name = {};
+
         var aggregated_data = {'quantity': 0};
         for (var item of form.items) {
             if (item.subitems && item.subitems.length !== 0) { // has subitems
                 for (var subitem of item.subitems) {
-                    var excel_name = subitem.name + ' ' + item.name;
-                    aggregated_data[excel_name] = {};
-                    aggregated_data[excel_name].quantity = 0;
+                    id_to_name[subitem.subitem_id] = item.name + ' ' + subitem.name;
+                    aggregated_data[subitem.subitem_id] = {quantity: 0};
                     for (var size of subitem.sizes) {
-                        aggregated_data[excel_name][size] = {
+                        aggregated_data[subitem.subitem_id][size] = {
                             'quantity': 0,
                             'numbers': []
                         };
                     }
                 }
             } else { // no subitems
-                aggregated_data[item.name] = {};
-                aggregated_data[item.name].quantity = 0;
+                id_to_name[item.item_id] = item.name;
+                aggregated_data[item.item_id] = {quantity: 0};
                 for (var size of item.sizes) {
-                    aggregated_data[item.name][size] = {
+                    aggregated_data[item.item_id][size] = {
                         'quantity': 0,
                         'numbers': []
                     };
@@ -196,49 +182,38 @@ function export_version_2(form_name, req, res, next) {
         }
         // built aggregated_data. time to populate it
 
-        orders.find({'form_name': form_name}, function(err, the_orders) {
+        orders.find({'form_id': form._id}, function(err, the_orders) {
             // grab the quantity and numbers from each
             // store in aggregated_data
             for (var order of the_orders) {
                 for (var item of order.items) {
-                    var split_name = item.name.split('-');
-                    if (split_name.length == 3) { // there are subitems
-                        var main_name = split_name[0];
-                        var sub_name = split_name[1];
-                        var size = split_name[2];
-
-                        var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
-                        aggregated_data[sub_name + ' ' + main_name][size].quantity += sanitized_quantity;
-                        aggregated_data[sub_name + ' ' + main_name].quantity += sanitized_quantity;
-                        aggregated_data.quantity += sanitized_quantity;
-                        aggregated_data[sub_name + ' ' + main_name][size].numbers = aggregated_data[sub_name + ' ' + main_name][size].numbers.concat(item.numbers);
-                    } else if (split_name.length == 2) { // no subitems
-                        var main_name = split_name[0];
-                        var size = split_name[1];
-
-                        var sanitized_quantity = isNaN(parseInt(item.quantity)) ? 0 : parseInt(item.quantity);
-                        aggregated_data[main_name][size].quantity += sanitized_quantity;
-                        aggregated_data[main_name].quantity += sanitized_quantity;
-                        aggregated_data.quantity += sanitized_quantity;
-                        aggregated_data[main_name][size].numbers = aggregated_data[main_name][size].numbers.concat(item.numbers);
-                    } else {
-                    }
+                    var sanitized_quantity = isNaN(parseInt(item.quantity))
+                        ? 0 : parseInt(item.quantity);
+                    aggregated_data[item.id][item.size].quantity += sanitized_quantity;
+                    aggregated_data[item.id].quantity += sanitized_quantity;
+                    aggregated_data.quantity += sanitized_quantity;
+                    aggregated_data[item.id][item.size].numbers =
+                        aggregated_data[item.id][item.size].  numbers.concat(item.numbers);
                 }
             }
             // aggregated data is populated. time to generate csv
             for (var item in aggregated_data) {
+                var item_name = id_to_name[item];
                 if (aggregated_data.hasOwnProperty(item) && item !== 'quantity') {
                     if (aggregated_data[item].hasOwnProperty('')) { // no sizes for this item
-                        csv += item + ',' + aggregated_data[item][''].quantity + ',';
+                        csv += item_name + ',' + aggregated_data[item][''].quantity + ',';
                         csv += '"' + aggregated_data[item][''].numbers.sort().toString() + '"';
                         csv += '\n';
                     } else { // there are sizes
-                        csv += item + '\n';
+                        csv += item_name + '\n';
                         for (var size in aggregated_data[item]) {
                             if (aggregated_data[item].hasOwnProperty(size) && size !== 'quantity') {
                                 csv += size + ',';
                                 csv += aggregated_data[item][size].quantity + ',';
-                                csv += '"' + aggregated_data[item][size].numbers.sort().toString() + '"';
+                                if (aggregated_data[item][size].numbers.length !== 0) {
+                                    aggregated_data[item][size].numbers.sort();
+                                }
+                                csv += '"' + aggregated_data[item][size].numbers.toString() + '"';
                                 csv += '\n';
                             }
                         }
@@ -249,27 +224,30 @@ function export_version_2(form_name, req, res, next) {
             csv += '\n' + 'Total,' + aggregated_data.quantity + '\n'
 
             // download the new file
-            var fileName = './data_' + req.sessionId;
-            fs.writeFile(fileName, csv, function(err) {
-                if (err) {
-                    console.log('Couldnt save the file');
-                }
-                res.download(fileName, form_name + '.csv', function(err) {
-                    if (err) {
-                        console.log('Error downloading the file');
-                    }
-                    // Delete the file
-                    fs.unlink(fileName, function(err) {
-                        if (err) {
-                            console.log('Error when deleting the file');
-                        }
-                    });
-                });
-            });
+            saveFile('./data_' + req.sessionId, form_name, csv, res);
         });
 
     });
 
+}
+
+function saveFile(fileName, formName, csv, res) {
+    fs.writeFile(fileName, csv, function(err) {
+        if (err) {
+            console.log('Couldnt save the file');
+        }
+        res.download(fileName, formName + '.csv', function(err) {
+            if (err) {
+                console.log('Error downloading the file');
+            }
+            // Delete the file
+            fs.unlink(fileName, function(err) {
+                if (err) {
+                    console.log('Error when deleting the file');
+                }
+            });
+        });
+    });
 }
 
 module.exports = router;
