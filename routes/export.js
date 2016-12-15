@@ -52,34 +52,42 @@ function export_version_1(form_name, req, res, next) {
                 if (item.subitems && item.subitems.length !== 0) {
                     csv += item.name;
                 }
+                else {
+                    csv += ',,'; // 2 ',' because of num col
+                }
                 for (var subitem of item.subitems) {
-                    // *2 because of number columns
-                    for (var i = 0; i < subitem.sizes.length * 2; i++) {
-                        csv += ',';
-                    }
+                    csv += ',,'.repeat(subitem.sizes.length); // 2 ',' because of num col
                 }
             }
             csv += '\n';
         }
 
+        var item_order = {};
+
         csv += 'Name,';
         for (var item of form.items) {
             if (item.subitems && item.subitems.length !== 0) { // There are subitems
                 for (var subitem of item.subitems) {
+                    item_order[subitem.subitem_id] = {};
                     if (subitem.sizes.length !== 0) {
                         for (var size of subitem.sizes) {
+                            item_order[subitem.subitem_id][size] = subitem.name + ' ' + size;
                             csv += subitem.name + ' ' + size + ',Number,';
                         }
                     } else { // There is no applicabale size (e.g. hats)
+                        item_order[subitem.subitem_id][''] = subitem.name;
                         csv += subitem.name + ',Number,';
                     }
                 }
             } else { // No subitems
+                item_order[item.item_id] = {};
                 if (item.sizes && item.sizes.length !== 0) {
                     for (var size of item.sizes) {
+                        item_order[item.item_id][size] = item.name + ' ' + size;
                         csv += item.name + ' ' + size + ',Number,';
                     }
                 } else { // There is no applicable size (e.g. hats)
+                    item_order[item.item_id][''] = item.name;
                     csv += item.name + ',Number,';
                 }
             }
@@ -123,12 +131,20 @@ function export_version_1(form_name, req, res, next) {
                     last_team_name = order.team;
                 }
                 csv += order.player_name + ',';
-                // TODO: fix so that order doesn't matter
-                for (var item of order.items) {
-                    if (item.quantity == 0) {
-                        csv += ',,';
-                    } else {
-                        csv += item.quantity + ',"' + item.numbers.toString() + '",';
+                for (var item_id in item_order) { // loop through in right order
+                    size_loop:
+                    for (var item_size in item_order[item_id]) {
+                        for (var item of order.items) {
+                            if (item.id.equals(item_id) && item.size === item_size) {
+                                if (item.quantity == 0) {
+                                    csv += ',,';
+                                } else {
+                                    csv += item.quantity + ',"' +
+                                           item.numbers.toString() + '",';
+                                }
+                                continue size_loop;
+                            }
+                        }
                     }
                 }
                 csv += '\n';
