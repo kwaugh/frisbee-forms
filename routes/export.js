@@ -12,7 +12,7 @@ router.all('/', function(req, res, next) {
         return;
     }
     var form_name = req.body['form-name'];
-    var export_version = req.body['export-version'];
+    var export_version = req.body['export-ersion'];
     var export_handlers = {
         '1': function() { export_version_1(form_name, req, res, next); },
         '2': function() { export_version_2(form_name, req, res, next); }
@@ -29,8 +29,8 @@ router.all('/', function(req, res, next) {
 /* Orders for each person */
 function export_version_1(form_name, req, res, next) {
     // Build the CSV string
-    forms.findOne({'name': form_name}, function(err, doc) {
-        if (err || !doc) {
+    forms.findOne({'name': form_name}, function(err, form) {
+        if (err || !form) {
             res.redirect('/admin');
             return;
         }
@@ -39,7 +39,7 @@ function export_version_1(form_name, req, res, next) {
 
         // Build the first row, which is item names (only if there are subitems)
         var has_subitems = false;
-        for (var item of doc.items) {
+        for (var item of form.items) {
             if (item.subitems && item.subitems.length !== 0) {
                 has_subitems = true;
                 break;
@@ -48,7 +48,7 @@ function export_version_1(form_name, req, res, next) {
 
         if (has_subitems) {
             csv += ','; // Empty cell above name column
-            for (var item of doc.items) {
+            for (var item of form.items) {
                 if (item.subitems && item.subitems.length !== 0) {
                     csv += item.name;
                 }
@@ -63,7 +63,7 @@ function export_version_1(form_name, req, res, next) {
         }
 
         csv += 'Name,';
-        for (var item of doc.items) {
+        for (var item of form.items) {
             if (item.subitems && item.subitems.length !== 0) { // There are subitems
                 for (var subitem of item.subitems) {
                     if (subitem.sizes.length !== 0) {
@@ -87,12 +87,12 @@ function export_version_1(form_name, req, res, next) {
         // Done building the column headers
         csv += '\n';
         
-        orders.find({'form_name': form_name}, function(err, docs) {
-            if (err || !docs) {
+        orders.find({'form_name': form_name}, function(err, the_orders) {
+            if (err || !the_orders) {
                 res.redirect('/admin');
                 return;
             }
-            docs.sort(function(a, b) {
+            the_orders.sort(function(a, b) {
                 if (a.team == b.team) {
                     // Sort by last name
                     // TODO: Store first and last name separately in DB
@@ -115,7 +115,7 @@ function export_version_1(form_name, req, res, next) {
                 return 0;
             });
             var last_team_name = '';
-            for (var order of docs) {
+            for (var order of the_orders) {
                 if (order.team !== last_team_name) {
                     if (last_team_name !== '') {
                         csv += '\n';
@@ -158,8 +158,8 @@ function export_version_1(form_name, req, res, next) {
 /* aggregated orders per item */
 function export_version_2(form_name, req, res, next) {
     // Build the CSV string
-    forms.findOne({'name': form_name}, function(err, doc) {
-        if (err || !doc) {
+    forms.findOne({'name': form_name}, function(err, form) {
+        if (err || !form) {
             res.redirect('/admin');
             return;
         }
@@ -170,7 +170,7 @@ function export_version_2(form_name, req, res, next) {
         csv += ',Quantity,Numbers\n';
 
         var aggregated_data = {'quantity': 0};
-        for (var item of doc.items) {
+        for (var item of form.items) {
             if (item.subitems && item.subitems.length !== 0) { // has subitems
                 for (var subitem of item.subitems) {
                     var excel_name = subitem.name + ' ' + item.name;
@@ -196,11 +196,11 @@ function export_version_2(form_name, req, res, next) {
         }
         // built aggregated_data. time to populate it
 
-        orders.find({'form_name': form_name}, function(err, docs) {
+        orders.find({'form_name': form_name}, function(err, the_orders) {
             // grab the quantity and numbers from each
             // store in aggregated_data
-            for (var doc of docs) {
-                for (var item of doc.items) {
+            for (var order of the_orders) {
+                for (var item of order.items) {
                     var split_name = item.name.split('-');
                     if (split_name.length == 3) { // there are subitems
                         var main_name = split_name[0];
