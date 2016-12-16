@@ -74,6 +74,7 @@ block content
                     label Item:
                     button.glyphicon.glyphicon-remove.pull-right.remove-item.text-danger
                     input.form-control(type='text' id='item-#{item_num}' name='item-num-#{item_num}' placeholder='Item' value='#{item.name}' required)
+                    input(type='hidden' name='id-item-num-#{item_num}' value='#{item.item_id}')
                 if item.subitems.length === 0
                     // Put the select here 
                     .form-group.item-sizes
@@ -117,6 +118,7 @@ block content
                                 label Sub Item:
                                 button.glyphicon.glyphicon-remove.pull-right.remove-subitem.text-danger
                                 input.form-control(type='text' id='subitem-#{subitem_num}' name='subitem-num-#{subitem_num}' placeholder='Sub Item' value='#{subitem.name}' required)
+                                input(type='hidden' name='id-subitem-num-#{subitem_num}' value='#{subitem.subitem_id}')
                             .form-group.sizes-group
                                 .form-group.item-sizes
                                     label Available Sizes:

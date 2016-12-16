@@ -14,22 +14,31 @@ router.all('/', function(req, res, next) {
         res.render('new_form');
         return;
     }
-    if (req.body['form_id'] && req.body['form_id'] !== '') {
-        // we are performing a form edit instead of a new form creation
-        console.log('editing form');
-    }
     /* Time to build the database entry */
     var form = {name: req.body['form-name'], items: [], live: false};
+    if (hasParam(req, 'form-id')) { // updating existing form
+        form['_id'] = new ObjectID(req.body['form-id']);
+    }
     var current_item_num = -1;
     for (var key in req.body) {
         if (key.indexOf('item-num') === 0) { // It's a new item
-            var item_id = new ObjectID(); // orders are linked to this id
+            var item_id = '';
+            if (hasParam(req, 'id-' + key)) { // updating existing item
+                item_id = new ObjectID(req.body['id-' + key]);
+            } else { // It's a new item
+                item_id = new ObjectID(); // orders are linked to this id
+            }
             form.items.push(
                 {name: req.body[key], sizes: [], subitems: [], 'item_id': item_id}
             );
             current_item_num++;
         } else if (key.indexOf('subitem-num') === 0) { // new subitem
-            var subitem_id = new ObjectID();
+            var subitem_id = '';
+            if (hasParam(req, 'id-' + key)) { // updating existing subitem
+                subitem_id = new ObjectID(req.body['id-' + key]);
+            } else { // it's a new subitem
+                subitem_id = new ObjectID();
+            }
             form.items[current_item_num].subitems.push(
                 {name: req.body[key], sizes:[], 'subitem_id': subitem_id}
             );
@@ -50,17 +59,15 @@ router.all('/', function(req, res, next) {
             form.live = true;
         }
     }
-    forms.findOne({name: req.body['form-name']}, function(err, doc) {
-        if (!err && doc && doc !== null) { // Update if it exists, create new otherwise
-            forms.update(doc, form);
-        } else {
-            forms.save(form);
-        }
-    });
+    forms.save(form);
     res.redirect('admin');
 });
 
 module.exports = router;
+
+function hasParam(req, param) {
+    return (req.body[param] !== undefined && req.body[param] !== '');
+}
 
 function validateParams(req, paramsList) {
     if (!req.body || req.body === null || req.body == {})
