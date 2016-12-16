@@ -10,14 +10,16 @@ router.get('/', function(req, res, next) {
         forms.find({}, function(err, the_forms) {
             var separated_team_forms = {};
             for (var admin of the_admins) {
-                var key = admin.team_id;
-                separated_team_forms[key] = {'team': key, 'open_forms': [], 'closed_forms': []};
+                var key = admin._id;
+                var team = admin.team;
+                separated_team_forms[key] =
+                    {'team': team, 'team_id': key, 'open_forms': [], 'closed_forms': []};
             }
             for (var form of the_forms) {
                 if (form.live) {
-                    separated_team_forms[form.team]['open_forms'].push(form);
+                    separated_team_forms[form.team_id]['open_forms'].push(form);
                 } else {
-                    separated_team_forms[form.team]['closed_forms'].push(form);
+                    separated_team_forms[form.team_id]['closed_forms'].push(form);
                 }
             }
             res.render('index', {'separated_forms': separated_team_forms});
