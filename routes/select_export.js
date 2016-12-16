@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+var ObjectID = require('mongodb').ObjectID;
 var forms = DB.collection('forms');
 
 router.all('/', function(req, res, next) {
@@ -9,7 +10,7 @@ router.all('/', function(req, res, next) {
         return;
     }
 
-    forms.find({team_id: req.session.team_id}, function(err, docs) {
+    forms.find({team_id: ObjectID(req.session.team_id)}, function(err, docs) {
         if (!err && docs) {
             res.render('select_export', {forms: docs});
         } else {

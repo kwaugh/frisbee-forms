@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+var ObjectID = require('mongodb').ObjectID;
 var forms = DB.collection('forms');
 
 /* Clone the specified form */
@@ -14,7 +15,7 @@ router.all('/', function(req, res, next) {
         res.redirect('admin');
         return;
     }
-    forms.findOne({name: form, team_id: req.session.team_id}, function(err, orig_form) {
+    forms.findOne({name: form, team_id: ObjectID(req.session.team_id)}, function(err, orig_form) {
         if (!form || err) {
             res.redirect('admin');
             return;
