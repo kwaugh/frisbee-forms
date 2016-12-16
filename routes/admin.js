@@ -17,7 +17,7 @@ router.all('/', function(req, res, next) {
             if (admin) {
                 req.session.admin = true;
                 req.session.team = team;
-                res.render('admin', { title: 'Admin page' });
+                res.render('admin', {'team': team});
             } else {
                 render_login(req, res);
             }
