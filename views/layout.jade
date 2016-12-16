@@ -6,13 +6,13 @@ html
         link(rel='stylesheet' href='/stylesheets/style.css')
         script(src='/javascripts/jquery.min.js')
         script(src='/javascripts/bootstrap.min.js')
-        script(src="/js-webshim/minified/polyfiller.js")
+        script(src='/js-webshim/minified/polyfiller.js')
         script.
             webshim.activeLang('en');
             webshims.polyfill('forms');
             webshims.cfg.no$Switch = true;
         block header
-        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
 
     body
         .container.center-block

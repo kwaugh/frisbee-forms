@@ -14,7 +14,7 @@ router.all('/', function(req, res, next) {
         res.redirect('admin');
         return;
     }
-    forms.findOne({name: form, team: req.session.team}, function(err, orig_form) {
+    forms.findOne({name: form, team_id: req.session.team_id}, function(err, orig_form) {
         if (!form || err) {
             res.redirect('admin');
             return;

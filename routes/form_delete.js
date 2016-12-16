@@ -15,10 +15,10 @@ router.all('/', function(req, res, next) {
         res.redirect('/admin');
         return;
     }
-    forms.find({name: form, team: req.session.team}, function(err, forms_to_delete) {
+    forms.find({name: form, team_id: req.session.team_id}, function(err, forms_to_delete) {
         for (var form of forms_to_delete) {
-            orders.remove({form_id: form._id, team: req.session.team});
-            forms.remove({name: form.name, team: req.session.team});
+            orders.remove({form_id: form._id, team_id: req.session.team_id});
+            forms.remove({name: form.name, team_id: req.session.team_id});
         }
     });
 

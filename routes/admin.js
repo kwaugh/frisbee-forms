@@ -7,7 +7,7 @@ var admins = DB.collection('admins');
 /* Admin page. */
 router.all('/', function(req, res, next) {
     if (req.session.admin) {
-        res.render('admin', { title: 'Admin page' });
+        res.render('admin', { team: req.session.team});
         return;
     }
     var password = req.body['admin-password'];
@@ -17,6 +17,7 @@ router.all('/', function(req, res, next) {
             if (admin) {
                 req.session.admin = true;
                 req.session.team = team;
+                req.session.team_id = admin._id;
                 res.render('admin', {'team': team});
             } else {
                 render_login(req, res);

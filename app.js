@@ -18,12 +18,12 @@ var info        = require('./routes/info');
 var form_submit = require('./routes/form_submit');
 var form_delete = require('./routes/form_delete');
 var form_delete_responses = require('./routes/form_delete_responses');
-var submitted   = require('./routes/submitted');
 var select_export = require('./routes/select_export');
 var export_form = require('./routes/export');
 var contact_info = require('./routes/contact_info');
 var delete_contacts = require('./routes/delete_all_contacts');
 var clone_form = require('./routes/clone_form');
+var logout      = require('./routes/logout');
 
 var app = express();
 
@@ -57,12 +57,12 @@ app.use('/info', info);
 app.use('/form_submit', form_submit);
 app.use('/form_delete', form_delete);
 app.use('/form_delete_responses', form_delete_responses);
-app.use('/submitted', submitted);
 app.use('/select_export', select_export);
 app.use('/export', export_form);
 app.use('/contact_info', contact_info);
 app.use('/delete_all_contacts', delete_contacts);
 app.use('/clone_form', clone_form);
+app.use('/logout', logout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

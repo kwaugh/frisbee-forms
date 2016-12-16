@@ -29,7 +29,7 @@ router.all('/', function(req, res, next) {
 /* Orders for each person */
 function export_version_1(form_name, req, res, next) {
     // Build the CSV string
-    forms.findOne({'name': form_name, team: req.session.team}, function(err, form) {
+    forms.findOne({'name': form_name, team_id: req.session.team_id}, function(err, form) {
         if (err || !form) {
             res.redirect('/admin');
             return;
@@ -159,7 +159,7 @@ function export_version_1(form_name, req, res, next) {
 /* aggregated orders per item */
 function export_version_2(form_name, req, res, next) {
     // Build the CSV string
-    forms.findOne({'name': form_name, team: req.session.team}, function(err, form) {
+    forms.findOne({'name': form_name, team_id: req.session.team_id}, function(err, form) {
         if (err || !form) {
             res.redirect('/admin');
             return;

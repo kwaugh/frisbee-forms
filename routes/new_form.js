@@ -15,7 +15,8 @@ router.all('/', function(req, res, next) {
         return;
     }
     /* Time to build the database entry */
-    var form = {name: req.body['form-name'], items: [], live: false, team: req.session.team};
+    var form = {name: req.body['form-name'], items: [], live: false,
+        team_id: ObjectID(req.session.team_id)};
     if (hasParam(req, 'form-id')) { // updating existing form
         form['_id'] = new ObjectID(req.body['form-id']);
     }

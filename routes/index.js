@@ -10,12 +10,11 @@ router.get('/', function(req, res, next) {
         forms.find({}, function(err, the_forms) {
             var separated_team_forms = {};
             for (var admin of the_admins) {
-                var key = admin.team;
+                var key = admin.team_id;
                 separated_team_forms[key] = {'team': key, 'open_forms': [], 'closed_forms': []};
             }
             for (var form of the_forms) {
                 if (form.live) {
-                    console.log('form.team:', form.team);
                     separated_team_forms[form.team]['open_forms'].push(form);
                 } else {
                     separated_team_forms[form.team]['closed_forms'].push(form);

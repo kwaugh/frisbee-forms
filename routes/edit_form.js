@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var ObjectID = require('mongodb').ObjectID;
 
 var forms = DB.collection('forms');
 
@@ -10,7 +11,8 @@ router.all('/', function(req, res, next) {
         return;
     }
     if (req.body['form-name']) { // They have selected a form
-        forms.findOne({name: req.body['form-name'], team: req.session.team}, function(err, doc) {
+        forms.findOne({name: req.body['form-name'], team_id: ObjectID(req.session.team_id)},
+                function(err, doc) {
             if (err || !doc || doc.length === {}) {
                 res.redirect('/admin');
             } else {
@@ -27,7 +29,7 @@ router.all('/', function(req, res, next) {
         });
 
     } else { // They need to select a form
-        forms.find({team: req.session.team}, function(err, docs) {
+        forms.find({team_id: ObjectID(req.session.team_id)}, function(err, docs) {
             res.render('select_edit_form', {forms: docs});
         });
     }
