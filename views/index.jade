@@ -5,16 +5,18 @@ block header
 
 
 block content
-    h1= title
+    h1 Frisbee Order Forms
     hr
-    p Open forms:
     form(method='post' action='info')
-        each form in open_forms
-            .form-group
-                button.btn.btn-default(type='submit' value='#{form.name}' name='form') #{form.name}
-    br
-    p Past forms:
-    form(method='post' action='info')
-        each form in closed_forms
-            .form-group
-                button.btn.btn-default(type='submit' value='#{form.name}' name='form') #{form.name}
+        each team in separated_forms
+            h3 #{team.team}
+            p Open forms:
+                each form in team.open_forms
+                    .form-group
+                        button.btn.btn-default(type='submit' value='#{form.name}' name='form') #{form.name}
+            br
+            p Closed forms:
+                each form in team.closed_forms
+                    .form-group
+                        button.btn.btn-default(type='submit' value='#{form.name}' name='form') #{form.name}
+            hr

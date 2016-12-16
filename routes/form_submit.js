@@ -30,7 +30,7 @@ router.all('/', function(req, res, next) {
         }
     }
 
-    forms.findOne({'_id': ObjectID(form_id)}, function(err, doc) {
+    forms.findOne({'_id': ObjectID(form_id), team: req.session.team}, function(err, doc) {
         if (err || !doc) {
             res.redirect('/');
             return;

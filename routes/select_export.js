@@ -9,7 +9,7 @@ router.all('/', function(req, res, next) {
         return;
     }
 
-    forms.find({}, function(err, docs) {
+    forms.find({team: req.session.team}, function(err, docs) {
         if (!err && docs) {
             res.render('select_export', {forms: docs});
         } else {

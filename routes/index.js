@@ -2,26 +2,27 @@ var express = require('express');
 var router = express.Router();
 
 var forms = DB.collection('forms');
+var admins = DB.collection('admins');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    forms.find({}, function(err, doc) {
-        /* console.log('doc:', doc); */
-        var current_date = new Date();
-        var open_forms = [];
-        var closed_forms = [];
-        for (var i in doc) {
-            if (!doc[i].live) { // only show the live forms
-                continue;
+    admins.find({}, function(err, the_admins) {
+        forms.find({}, function(err, the_forms) {
+            var separated_team_forms = {};
+            for (var admin of the_admins) {
+                var key = admin.team;
+                separated_team_forms[key] = {'team': key, 'open_forms': [], 'closed_forms': []};
             }
-            if (doc[i].date >= current_date) {
-                open_forms.push(doc[i]);
-            } else {
-                closed_forms.push(doc[i]);
+            for (var form of the_forms) {
+                if (form.live) {
+                    console.log('form.team:', form.team);
+                    separated_team_forms[form.team]['open_forms'].push(form);
+                } else {
+                    separated_team_forms[form.team]['closed_forms'].push(form);
+                }
             }
-        }
-        res.render('index', { title: 'Frisbee Order Form' , 'open_forms': open_forms,
-            'closed_forms': closed_forms });
+            res.render('index', {'separated_forms': separated_team_forms});
+        });
     });
 });
 
