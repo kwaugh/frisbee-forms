@@ -11,18 +11,30 @@ router.all('/', function(req, res, next) {
         return;
     }
     var password = req.body['admin-password'];
-    if (password && password !== '') {
-        admins.findOne({'password': password}, function(err, doc) {
-            if (req.body['admin-password'] === doc.password) {
+    var team = req.body['team'];
+    if (password && password !== '' && team && team !== '') {
+        admins.findOne({'password': password, 'team': team}, function(err, admin) {
+            if (admin) {
                 req.session.admin = true;
+                req.session.team = team;
                 res.render('admin', { title: 'Admin page' });
             } else {
-                res.render('admin_password', { title: 'Admin page' });
+                render_login(req, res);
             }
         });
     } else {
-        res.render('admin_password', { title: 'Admin page' });
+        render_login(req, res);
     }
 });
+
+function render_login(req, res) {
+    admins.find({}, function(err, admins) {
+        var teams = [];
+        for (var admin of admins) {
+            teams.push(admin.team);
+        }
+        res.render('admin_password', {'teams': teams});
+    });
+}
 
 module.exports = router;
