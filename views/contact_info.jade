@@ -30,14 +30,15 @@ block content
                     td #{contact.team}
                     td #{contact.phone}
                     td #{contact.email}
-    button.btn.btn-danger(type='button' data-toggle='modal' data-target='.delete-contacts') Delete All Contact Info
-    div(class='modal fade delete-contacts' tabindex='-1' role='dialog' aria-labelledby='delete-contacts')
-        div.modal-dialog.modal-sm
-            div.modal-content
-                div.modal-header
-                    button.close(type='button' data-dismiss='modal' aria-label='Close')
-                        span(aria-hidden='true') &times;
-                    h4.modal-title.text-center Confirm Deletion Of All Contacts
-                div.modal-body
-                    form(method='post' action='delete_all_contacts')
-                        input.btn.btn-danger.center-block(type='submit' name='submit' value='Delete')
+    //-
+        button.btn.btn-danger(type='button' data-toggle='modal' data-target='.delete-contacts') Delete All Contact Info
+        div(class='modal fade delete-contacts' tabindex='-1' role='dialog' aria-labelledby='delete-contacts')
+            div.modal-dialog.modal-sm
+                div.modal-content
+                    div.modal-header
+                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                            span(aria-hidden='true') &times;
+                        h4.modal-title.text-center Confirm Deletion Of All Contacts
+                    div.modal-body
+                        form(method='post' action='delete_all_contacts')
+                            input.btn.btn-danger.center-block(type='submit' name='submit' value='Delete')

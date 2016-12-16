@@ -10,7 +10,8 @@ router.all('/', function(req, res, next) {
         return;
     }
 
-    names.remove();
+    // disable this for now
+    // names.remove({});
     res.redirect('/contact_info');
 });
 
