@@ -6,17 +6,17 @@ var forms = DB.collection('forms');
 /* Clone the specified form */
 router.all('/', function(req, res, next) {
     if (!req.session.admin) {
-        res.redirect('/admin');
+        res.redirect('admin');
         return;
     }
     var form = req.body['form-name'];
     if (!form || form === null || form.length === 0) {
-        res.redirect('/admin');
+        res.redirect('admin');
         return;
     }
     forms.findOne({name: form}, function(err, orig_form) {
         if (!form || err) {
-            res.redirect('/edit_form');
+            res.redirect('admin');
             return;
         }
         var new_name = orig_form.name + "_clone";
