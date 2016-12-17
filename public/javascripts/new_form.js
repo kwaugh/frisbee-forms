@@ -22,11 +22,22 @@ $(function() {
         var subitem_num = $(form).find('.subitem-group').length;
         var item_num = num_items_on_page;
         var max_num = item_num + subitem_num;
-        $(this).before("<div class='item-parent'><div class='form-group'><label>Item:</label> \
-                            <button class='glyphicon glyphicon-remove pull-right remove-item text-danger'></button>\
-                            <input type='text' id='item-"+ item_num + "' name='item-num-" + item_num + "' class='form-control' placeholder='Item' required/> \
-                            </div>" + sizes + "\
-                    <div class='form-group'><button class='btn btn-info add-subitem'>Add Sub Item</button></div></div>" );
+        $(this).before(
+            "<div class='item-parent'> \
+                <div class='form-group>'> \
+                    <div class='form-group'> \
+                        <label>Item:</label> \
+                        <button class='glyphicon glyphicon-remove pull-right remove-item text-danger'></button> \
+                        <input type='text' id='item-"+ item_num + "' name='item-num-" + item_num + "' class='form-control' placeholder='Item' required/> \
+                    </div> \
+                </div> \
+            <div class='form-group'> \
+                <label>Supports Numbers:</label>&nbsp \
+                <input type='checkbox' name='supports-nums-" + item_num + "' checked> \
+            </div>"
+            + sizes +
+            "<div class='form-group'><button class='btn btn-info add-subitem'>Add Sub Item</button></div></div>"
+        );
         $(this).siblings('.item-parent').last().children('.item-sizes').children('select').attr('name', 'item-size-' + max_num);
         isFirstItem = false;
         if (!isFirstItem && num_items_on_page !== 0) {

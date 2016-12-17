@@ -72,6 +72,13 @@ block content
                     button.glyphicon.glyphicon-remove.pull-right.remove-item.text-danger
                     input.form-control(type='text' id='item-#{item_num}' name='item-num-#{item_num}' placeholder='Item' value='#{item.name}' required)
                     input(type='hidden' name='id-item-num-#{item_num}' value='#{item.item_id}')
+                .form-group
+                    label Supports Numbers:
+                    &nbsp
+                    if item.supports_nums
+                        input(type='checkbox' name='supports-nums-#{item_num}' checked)
+                    else
+                        input(type='checkbox' name='supports-nums-#{item_num}')
                 if item.subitems.length === 0
                     // Put the select here 
                     .form-group.item-sizes

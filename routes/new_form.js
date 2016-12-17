@@ -29,9 +29,10 @@ router.all('/', function(req, res, next) {
             } else { // It's a new item
                 item_id = new ObjectID(); // orders are linked to this id
             }
-            form.items.push(
-                {name: req.body[key], sizes: [], subitems: [], 'item_id': item_id}
-            );
+            form.items.push({
+                name: req.body[key], sizes: [], subitems: [], 'item_id': item_id,
+                supports_nums: false
+            });
             current_item_num++;
         } else if (key.indexOf('subitem-num') === 0) { // new subitem
             var subitem_id = '';
@@ -48,6 +49,8 @@ router.all('/', function(req, res, next) {
         } else if (key.indexOf('subitem-size') === 0) {
             form.items[current_item_num].subitems[form.items[current_item_num].
                 subitems.length - 1].sizes = [].concat(req.body[key]); 
+        } else if (key.indexOf('supports-nums') === 0) {
+            form.items[current_item_num].supports_nums = true;
         } else if (key.indexOf('close-datetime') === 0) { // The closing datetime
             var server_offset = new Date().getTimezoneOffset();
             var client_offset = req.body['timezone-offset'];
