@@ -32,12 +32,12 @@ $(function() {
                     </div> \
                 </div> \
             <div class='form-group'> \
-                <label>Supports Numbers:</label>&nbsp \
-                <input type='checkbox' name='supports-nums-" + item_num + "' checked> \
-            </div> \
-            <div class='form-group'> \
                 <label>Upload Photo:</label>&nbsp \
                 <input type='file' name='photo-" + item_num + "'> \
+            </div> \
+            <div class='form-group'> \
+                <label>Supports Numbers:</label>&nbsp \
+                <input type='checkbox' name='supports-nums-" + item_num + "' checked> \
             </div>"
             + sizes +
             "<div class='form-group'><button class='btn btn-info add-subitem'>Add Sub Item</button></div></div>"
