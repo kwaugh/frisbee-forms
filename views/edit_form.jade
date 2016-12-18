@@ -5,10 +5,10 @@ block header
     script(src='/javascripts/new_form.js')
 block content
     h1 Edit Form: #{form.name}
-        // Small modal
         button.btn.btn-danger.pull-right(type='button' data-toggle='modal' data-target='.delete-form') Delete Form
         button.btn.btn-warning.pull-right(type='button' data-toggle='modal' data-target='.delete-responses-form') Delete All Responses
         button.btn.btn-info.pull-right(type='button' data-toggle='modal' data-target='.clone-form') Clone Form
+        //- Delete form modal
         div(class='modal fade delete-form' tabindex='-1' role='dialog' aria-labelledby='delete-form')
             div.modal-dialog.modal-sm
                 div.modal-content
@@ -20,6 +20,7 @@ block content
                         form(method='post' action='form_delete')
                             input(type='hidden' name='form-name' value='#{form.name}')
                             input.btn.btn-danger.center-block(type='submit' name='submit' value='Delete')
+        //- Delete responses modal
         div(class='modal fade delete-responses-form' tabindex='-1' role='dialog' aria-labelledby='delete-responses-form')
             div.modal-dialog.modal-sm
                 div.modal-content
@@ -31,6 +32,7 @@ block content
                         form(method='post' action='form_delete_responses')
                             input(type='hidden' name='form-name' value='#{form.name}')
                             input.btn.btn-danger.center-block(type='submit' name='submit' value='Delete')
+        //- clone form modal
         div(class='modal fade clone-form' tabindex='-1' role='dialog' aria-labelledby='clone-form')
             div.modal-dialog.modal-sm
                 div.modal-content
@@ -45,7 +47,7 @@ block content
 
 
     hr
-    form(method='post' action='new_form')
+    form(method='post' action='new_form' enctype='multipart/form-data')
         input(type='hidden' name='form-id' value='#{form_id}')
         .form-group
             label Form Name:
@@ -79,8 +81,10 @@ block content
                         input(type='checkbox' name='supports-nums-#{item_num}' checked)
                     else
                         input(type='checkbox' name='supports-nums-#{item_num}')
+                .form-group
+                    label Upload Photo:
+                    input(type='file' name='photo-#{item_num}')
                 if item.subitems.length === 0
-                    // Put the select here 
                     .form-group.item-sizes
                         label Available Sizes:
                         select.form-control.tall-select(multiple required name='item-size-#{item_num}')

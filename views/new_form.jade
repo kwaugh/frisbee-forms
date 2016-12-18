@@ -7,7 +7,7 @@ block header
 block content
     h1 New Form
     hr
-    form(method='post')
+    form(method='post' action='new_form' enctype='multipart/form-data')
         .form-group
             label Form Name:
             input.form-control(type='text' name='form-name' placeholder='Name' required)
