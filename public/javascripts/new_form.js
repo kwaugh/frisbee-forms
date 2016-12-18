@@ -8,22 +8,38 @@ $(function() {
     var isFirstItem = true;
     var form = $(document).find('form');
 
-    var sizes = "<div class='form-group item-sizes'><label>Available Sizes:</label><select multiple class='form-control tall-select' required> \
-                                                        <option value=''>N/A</option> \
-                                                        <option value='XS'>X-Small</option> \
-                                                        <option value='S'>Small</option> \
-                                                        <option value='M'>Medium</option> \
-                                                        <option value='L'>Large</option> \
-                                                        <option value='XL'>X-Large</option> \
-                                                    </select></div>";
+    var sizes = " \
+        <div class='form-group item-sizes'> \
+            <label>Available Sizes:</label> \
+            <select multiple class='form-control tall-select' required> \
+            <option value=''>N/A</option> \
+            <option value='XS'>X-Small</option> \
+            <option value='S'>Small</option> \
+            <option value='M'>Medium</option> \
+            <option value='L'>Large</option> \
+            <option value='XL'>X-Large</option> \
+            </select> \
+        </div> \
+    ";
+
+    var number_options = " \
+        <div class='number-options'> \
+            <select multiple class='form-control' required> \
+                <option value='fb'>Front and Back</option> \
+                <option value='b'>Back</option> \
+                <option value='f'>Front</option> \
+                <option value='n'>No numbers</option> \
+            </select> \
+        </div> \
+    ";
 
     $('#add-item').click(function(e) {
         var num_items_on_page = $(form).find('.item-parent').length;
         var subitem_num = $(form).find('.subitem-group').length;
         var item_num = num_items_on_page;
         var max_num = item_num + subitem_num;
-        $(this).before(
-            "<div class='item-parent'> \
+        $(this).before("\
+            <div class='item-parent'> \
                 <div class='form-group>'> \
                     <div class='form-group'> \
                         <label>Item:</label> \
@@ -35,14 +51,21 @@ $(function() {
                 <label>Upload Photo:</label>&nbsp \
                 <input type='file' name='photo-" + item_num + "'> \
             </div> \
-            <div class='form-group'> \
+            <div class='form-group supports-nums-wrapper'> \
                 <label>Supports Numbers:</label>&nbsp \
-                <input type='checkbox' name='supports-nums-" + item_num + "' checked> \
-            </div>"
-            + sizes +
-            "<div class='form-group'><button class='btn btn-info add-subitem'>Add Sub Item</button></div></div>"
-        );
-        $(this).siblings('.item-parent').last().children('.item-sizes').children('select').attr('name', 'item-size-' + max_num);
+                <input type='checkbox' class='supports-nums' name='supports-nums-" + item_num + "' checked> \
+                " + number_options + " \
+            </div> \
+            " + sizes + " \
+            <div class='form-group'><button class='btn btn-info add-subitem'>Add Sub Item</button></div></div>"
+        ); // end of insertion
+        // add name to item sizes select input
+        $(this).siblings('.item-parent').last().children('.item-sizes:first')
+            .children('select:first').attr('name', 'item-size-' + max_num);
+        // add name to number options select input
+        $(this).siblings('.item-parent').last().children('.supports-nums-wrapper')
+            .children('.number-options:first').children('select:first')
+            .attr('name', 'number-options-' + max_num);
         isFirstItem = false;
         if (!isFirstItem && num_items_on_page !== 0) {
             $(this).prev().prepend('<hr></hr>');
@@ -65,13 +88,26 @@ $(function() {
     });
 
     $(document).on('click', '.remove-item', function(e) {
-        $(this).parents('.item-parent').remove(); 
+        $(this).parents('.item-parent').remove();
         return false;
     });
 
     $(document).on('click', '.remove-subitem', function(e) {
-        $(this).parents('.subitem-group').remove(); 
+        $(this).parents('.subitem-group').remove();
         return false;
     });
 
+    $(document).on('change', '.supports-nums', function(e) {
+        if (this.checked) {
+            $(this).after(number_options);
+            // add name to number options select input
+            var num_id = $(this).parent().siblings(':first').children(':first').
+                children('input:first').attr('id');
+            var num = num_id.substring(num_id.indexOf('-') + 1);
+            $(this).siblings('.number-options:first').children('select:first')
+                .attr('name', 'number-options-' + num);
+        } else { // remove the select with the number options
+            $(this).siblings('.number-options:first').remove();
+        }
+    });
 });
