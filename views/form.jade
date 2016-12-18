@@ -18,7 +18,7 @@ block content
             if item.photo_path
                 h3
                     div.popover-wrap(id='#{sanitized_name}')
-                        span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='right' data-content='<img src=\'#{item.photo_path}\' width=512 />') #{item.name}
+                        span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />') #{item.name}
             else
                 h3 #{item.name}
             each size in item.sizes
