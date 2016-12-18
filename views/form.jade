@@ -14,8 +14,13 @@ block content
         input(type='hidden' value='#{form._id}' name='form-id')
         input(type='hidden' value='#{team}' name='team')
         each item in form.items
-            h3 #{item.name}
             - var sanitized_name = item.name.split(' ').join('_')
+            if item.photo_path
+                h3
+                    div.popover-wrap(id='#{sanitized_name}')
+                        span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='right' data-content='<img src=\'#{item.photo_path}\' width=512 />') #{item.name}
+            else
+                h3 #{item.name}
             each size in item.sizes
                 .size
                     .hidden.item-name #{sanitized_name}-#{size}

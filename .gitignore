@@ -6,3 +6,4 @@ node_modules/
 session
 *.vim
 *.txt
+public/photos/

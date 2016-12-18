@@ -6,3 +6,11 @@
     font-weight: bold;
     color: red;
 }
+
+.popover {
+    max-width: none;
+}
+
+.popover-wrap .popover {
+    width: 512;
+}

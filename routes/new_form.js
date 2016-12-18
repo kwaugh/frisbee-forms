@@ -77,10 +77,13 @@ router.all('/', upload.any(), function(req, res, next) {
                 form.live = true;
             }
         }
-        for (var file in req.files) { // these are the picture uploads
-            var item_num = parseInt(file.substring(file.indexOf('-') + 1));
+        for (var file of req.files) { // these are the picture uploads
+            console.log('file:', file);
+            var item_num = parseInt(file.fieldname.substring(file.fieldname.indexOf('-') + 1));
             var item_id = item_num_to_id[item_num];
-            form.items[item_num].photo_path = req.files[file].path;
+            console.log('file:', file);
+            console.log('item_num:', item_num);
+            form.items[item_num].photo_path = 'photos/' + file.filename ;
         }
         forms.save(form);
         res.redirect('admin');

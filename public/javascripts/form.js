@@ -1,4 +1,6 @@
 $(function() {
+    // var img = "<img src='/photos/61e7e4d88927d7eb511fe05b0da95b2c' height=512 width=512/>";
+    $('.popover-photo').popover({trigger: 'hover click', html : true});
     var default_number = $('#default-number').val();
     $('.quantity').change(function() {
         var value = $(this).val();    
