@@ -27,8 +27,10 @@ router.all('/', upload.any(), function(req, res, next) {
 
     forms.findOne({_id: form['_id']}, function(err, the_form) {
         var id_to_item = {};
-        for (var item of the_form.items) {
-            id_to_item[item.item_id] = item;
+        if (the_form) {
+            for (var item of the_form.items) {
+                id_to_item[item.item_id] = item;
+            }
         }
         var item_num_to_id = {};
         var current_item_num = -1;

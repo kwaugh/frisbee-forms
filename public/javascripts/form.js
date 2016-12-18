@@ -7,7 +7,7 @@ $(function() {
         var current_num = $(this).siblings('.number').length;
         var item_name = $(this).parent().siblings('.item-name:first').text();
 	    item_name = item_name.replace("'", "");
-        var supports_nums = $(this).parent().siblings('.supports-nums:first').text();
+        var supports_nums = $(this).parent().parent().siblings('.supports-nums:first').text();
         if (supports_nums === 'true') {
             for (var i = 0; i < value - current_num; i++) { // Add new number boxes
                 var line_break = current_num === 0 && i === 0 ? '<br>' : '';
