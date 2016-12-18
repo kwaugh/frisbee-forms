@@ -75,15 +75,15 @@ block content
                     input.form-control(type='text' id='item-#{item_num}' name='item-num-#{item_num}' placeholder='Item' value='#{item.name}' required)
                     input(type='hidden' name='id-item-num-#{item_num}' value='#{item.item_id}')
                 .form-group
+                    label Upload Photo:
+                    input(type='file' name='photo-#{item_num}')
+                .form-group
                     label Supports Numbers:
                     &nbsp
                     if item.supports_nums
                         input(type='checkbox' name='supports-nums-#{item_num}' checked)
                     else
                         input(type='checkbox' name='supports-nums-#{item_num}')
-                .form-group
-                    label Upload Photo:
-                    input(type='file' name='photo-#{item_num}')
                 if item.subitems.length === 0
                     .form-group.item-sizes
                         label Available Sizes:
