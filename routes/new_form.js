@@ -80,11 +80,8 @@ router.all('/', upload.any(), function(req, res, next) {
             }
         }
         for (var file of req.files) { // these are the picture uploads
-            console.log('file:', file);
             var item_num = parseInt(file.fieldname.substring(file.fieldname.indexOf('-') + 1));
             var item_id = item_num_to_id[item_num];
-            console.log('file:', file);
-            console.log('item_num:', item_num);
             form.items[item_num].photo_path = 'photos/' + file.filename ;
         }
         forms.save(form);
