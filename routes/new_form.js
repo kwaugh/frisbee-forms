@@ -34,8 +34,13 @@ router.all('/', upload.any(), function(req, res, next) {
         }
         var item_num_to_id = {};
         var current_item_num = -1;
+        var auto_gen_subitems = [];
         for (var key in req.body) {
             if (key.indexOf('item-num') === 0) { // It's a new item
+                if (auto_gen_subitems.length !== 0) { // save to previous item
+                    addAutoGenToItems(form.items[current_item_num], auto_gen_subitems);
+                    auto_gen_subitems = [];
+                }
                 var item_id = '';
                 var photo_path = '';
                 if (hasParam(req, 'id-' + key)) { // updating existing item
@@ -61,12 +66,50 @@ router.all('/', upload.any(), function(req, res, next) {
                     {name: req.body[key], sizes:[], 'subitem_id': subitem_id}
                 );
             } else if (key.indexOf('item-size') === 0) {
+                if (auto_gen_subitems.length !== 0) {
+                    for (var auto_gen of auto_gen_subitems) {
+                        auto_gen.sizes = [].concat(req.body[key]);
+                    }
+                }
                 form.items[current_item_num].sizes = [].concat(req.body[key]);
             } else if (key.indexOf('subitem-size') === 0) {
+                if (auto_gen_subitems.length !== 0) {
+                    for (var auto_gen of auto_gen_subitems) {
+                        auto_gen.sizes = [].concat(req.body[key]);
+                    }
+                }
                 form.items[current_item_num].subitems[form.items[current_item_num].
                     subitems.length - 1].sizes = [].concat(req.body[key]);
             } else if (key.indexOf('supports-nums') === 0) {
                 form.items[current_item_num].supports_nums = true;
+            } else if (key.indexOf('number-options') === 0) {
+                if (hasParam(req, 'id-' + key)) { // updating existing item
+                    // this case should never happen
+                    console.error('number-options should not be submitted with existing item');
+                } else { // new item
+                    var item_name = form.items[current_item_num].name;
+                    for (number_option of req.body[key]) {
+                        var subitem_id = new ObjectID();
+                        var subitem_name = '';
+                        switch(number_option) {
+                            case 'fb':
+                                subitem_name = item_name + ' with front and back numbers';
+                                break;
+                            case 'f':
+                                subitem_name = item_name + ' with front number';
+                                break;
+                            case 'b':
+                                subitem_name = item_name + ' with back number';
+                                break;
+                            case 'n':
+                                subitem_name = item_name + ' with no numbers';
+                                break;
+                        }
+                        auto_gen_subitems.push(
+                            {name: subitem_name, sizes: [], 'subitem_id': subitem_id}
+                        );
+                    }
+                }
             } else if (key.indexOf('close-datetime') === 0) { // The closing datetime
                 var server_offset = new Date().getTimezoneOffset();
                 var client_offset = req.body['timezone-offset'];
@@ -78,6 +121,10 @@ router.all('/', upload.any(), function(req, res, next) {
             } else if (key.indexOf('form-live') === 0) { // is the form live?
                 form.live = true;
             }
+        }
+        // handle any dangling auto generated items
+        if (auto_gen_subitems !== []) { // save to previous item
+            addAutoGenToItems(form.items[current_item_num], auto_gen_subitems);
         }
         for (var file of req.files) { // these are the picture uploads
             var item_num = parseInt(file.fieldname.substring(file.fieldname.indexOf('-') + 1));
@@ -104,4 +151,30 @@ function validateParams(req, paramsList) {
             return false;
     }
     return true;
+}
+
+function addAutoGenToItems(item, auto_gen_subitems) {
+    console.log('item:' , item);
+    if (item.subitems.length == 0) {
+        for (var auto_gen of auto_gen_subitems) {
+            item.subitems.push(auto_gen);
+        }
+    } else {
+        var to_save = [];
+        for (var subitem of item.subitems) {
+            for (var auto_gen of auto_gen_subitems) {
+                to_save.push(deepClone(auto_gen));
+                to_save[to_save.length - 1].name += ' ' + subitem.name;
+            }
+        }
+        item.subitems = [];
+        for (var auto_gen of to_save) {
+            item.subitems.push(auto_gen);
+        }
+    }
+}
+
+function deepClone(a) {
+       return JSON.parse(JSON.stringify(a));
+
 }
