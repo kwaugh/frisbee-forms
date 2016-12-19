@@ -24,7 +24,7 @@ $(function() {
 
     var number_options = " \
         <div class='number-options'> \
-            <select multiple class='form-control' required> \
+            <select multiple class='form-control'> \
                 <option value='fb'>Front and Back</option> \
                 <option value='b'>Back</option> \
                 <option value='f'>Front</option> \
