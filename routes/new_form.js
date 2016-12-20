@@ -66,18 +66,8 @@ router.all('/', upload.any(), function(req, res, next) {
                     {name: req.body[key], sizes:[], 'subitem_id': subitem_id}
                 );
             } else if (key.indexOf('item-size') === 0) {
-                if (auto_gen_subitems.length !== 0) {
-                    for (var auto_gen of auto_gen_subitems) {
-                        auto_gen.sizes = [].concat(req.body[key]);
-                    }
-                }
                 form.items[current_item_num].sizes = [].concat(req.body[key]);
             } else if (key.indexOf('subitem-size') === 0) {
-                if (auto_gen_subitems.length !== 0) {
-                    for (var auto_gen of auto_gen_subitems) {
-                        auto_gen.sizes = [].concat(req.body[key]);
-                    }
-                }
                 form.items[current_item_num].subitems[form.items[current_item_num].
                     subitems.length - 1].sizes = [].concat(req.body[key]);
             } else if (key.indexOf('supports-nums') === 0) {
@@ -156,13 +146,17 @@ function validateParams(req, paramsList) {
 function addAutoGenToItems(item, auto_gen_subitems) {
     if (item.subitems.length == 0) {
         for (var auto_gen of auto_gen_subitems) {
+            auto_gen.sizes = item.sizes;
             item.subitems.push(auto_gen);
         }
+        item.sizes = [];
     } else {
         var to_save = [];
         for (var subitem of item.subitems) {
             for (var auto_gen of auto_gen_subitems) {
-                to_save.push(deepClone(auto_gen));
+                var auto_gen_clone = deepClone(auto_gen);
+                auto_gen_clone.sizes = subitem.sizes;
+                to_save.push(auto_gen_clone);
                 to_save[to_save.length - 1].name += ' ' + subitem.name;
             }
         }
