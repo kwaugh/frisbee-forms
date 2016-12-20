@@ -1,7 +1,6 @@
 $(function() {
     // var img = "<img src='/photos/61e7e4d88927d7eb511fe05b0da95b2c' height=512 width=512/>";
     var width = $(window).width() - 50;
-    console.log('width:', width);
     $('.popover-photo').popover({trigger: 'click', html : true});
     $('.popover-photo').each(function() {
         var img = $(this).attr('data-content');
@@ -10,7 +9,6 @@ $(function() {
         if (width < $(new_img).attr('width')) {
             $(new_img).attr('width', width);
             $(this).attr('data-content', $(new_img).prop('outerHTML'));
-            console.log('this:', $(this));
         }
     });
     var default_number = $('#default-number').val();
@@ -31,4 +29,9 @@ $(function() {
             $(this).siblings('.number:last').remove();
         } 
     });
+        $('.toggle-subitems').click(function() {
+            $(this).parent().siblings('.subitems:first').toggleClass('hidden');
+            $(this).children('span.glyphicon:first').toggleClass('glyphicon-menu-up');
+            $(this).children('span.glyphicon:first').toggleClass('glyphicon-menu-down');
+        });
 });

@@ -14,70 +14,73 @@ block content
         input(type='hidden' value='#{form._id}' name='form-id')
         input(type='hidden' value='#{team}' name='team')
         each item in form.items
-            - var sanitized_name = item.name.split(' ').join('_')
-            if item.photo_path
+            div
+                - var sanitized_name = item.name.split(' ').join('_')
                 h3 #{item.name} &nbsp
-                    span.popover-wrap(id='#{sanitized_name}')
-                        span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />')
-                            button.btn.btn-default(type='button' aria-lable='Left Align')
-                                span.glyphicon.glyphicon-picture(aria-hidden='true')
-                //- h3
-                    div.popover-wrap(id='#{sanitized_name}')
-                        span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />') #{item.name}
-            else
-                h3 #{item.name}
-            each size in item.sizes
-                .hidden.supports-nums #{item.supports_nums}
-                .size
-                    .hidden.item-name #{sanitized_name}-#{size}
-                    .form-group.col-xs-offset-1
-                        label= size
-                        //- Check to see if the user has already ordered something
-                        - var found_item = false
-                        if order.items
-                            each order_item in order.items
-                                if (order_item.id.toString() === item.item_id.toString() && order_item.size === size)
-                                    input.form-control.quantity(type='number' name='quantity-#{size}-#{item.item_id}' min='0' max='20', value='#{order_item.quantity}')
-                                    - var count = 1
-                                    each number in order_item.numbers
-                                        .form-group.col-xs-offset-1.number
-                                            if count === 1
-                                                br
-                                            label Number:
-                                            input.form-control(type='number' name='number-#{size}-#{count}-#{item.item_id}' value='#{number}' placeholder='Number')
-                                            - count++
-                                    - found_item = true
-
-                        unless found_item
-                            input.form-control.quantity(type='number' name='quantity-#{size}-#{item.item_id}' min='0' max='20', value='0')
-            each subitem in item.subitems
-                hr
-                h4 #{subitem.name}
-                - var sanitized_subitem_name = sanitized_name + '-' + subitem.name.split(' ').join('_')
-                .form-group
+                    if item.subitems.length !== 0
+                        button.btn.btn-default.toggle-subitems(type='button')
+                            span.glyphicon.glyphicon-menu-down(aria-hidden='true')
+                    if item.photo_path
+                        span.popover-wrap(id='#{sanitized_name}')
+                            span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />')
+                                button.btn.btn-default(type='button')
+                                    span.glyphicon.glyphicon-picture(aria-hidden='true')
+                    //- h3
+                        div.popover-wrap(id='#{sanitized_name}')
+                            span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />') #{item.name}
+                each size in item.sizes
                     .hidden.supports-nums #{item.supports_nums}
-                    each size in subitem.sizes
-                        .size
-                            .hidden.item-name #{sanitized_subitem_name}-#{size}
-                            .form-group.col-xs-offset-1
-                                label= size
-                                - var found_sub_item = false
-                                if order.items
-                                    each order_item in order.items
-                                        if (order_item.id.toString() === subitem.subitem_id.toString() && order_item.size === size)
-                                            input.form-control.quantity(type='number' name='quantity-#{size}-#{subitem.subitem_id}' min='0' max='20', value='#{order_item.quantity}')
-                                            - var count = 1
-                                            each number in order_item.numbers
-                                                .form-group.col-xs-offset-1.number
-                                                    if count === 1
-                                                        br
-                                                    label Number:
-                                                    input.form-control(type='number' name='number-#{size}-#{count}-#{subitem.subitem_id}' value='#{number}' placeholder='Number')
-                                                    - count++
-                                            - found_sub_item = true
+                    .size
+                        .hidden.item-name #{sanitized_name}-#{size}
+                        .form-group.col-xs-offset-1
+                            label= size
+                            //- Check to see if the user has already ordered something
+                            - var found_item = false
+                            if order.items
+                                each order_item in order.items
+                                    if (order_item.id.toString() === item.item_id.toString() && order_item.size === size)
+                                        input.form-control.quantity(type='number' name='quantity-#{size}-#{item.item_id}' min='0' max='20', value='#{order_item.quantity}')
+                                        - var count = 1
+                                        each number in order_item.numbers
+                                            .form-group.col-xs-offset-1.number
+                                                if count === 1
+                                                    br
+                                                label Number:
+                                                input.form-control(type='number' name='number-#{size}-#{count}-#{item.item_id}' value='#{number}' placeholder='Number')
+                                                - count++
+                                        - found_item = true
 
-                                unless found_sub_item
-                                    input.form-control.quantity(type='number' name='quantity-#{size}-#{subitem.subitem_id}' min='0' max='20' value='0')
+                            unless found_item
+                                input.form-control.quantity(type='number' name='quantity-#{size}-#{item.item_id}' min='0' max='20', value='0')
+                div.hidden.subitems
+                    each subitem in item.subitems
+                        hr
+                        h4 #{subitem.name}
+                        - var sanitized_subitem_name = sanitized_name + '-' + subitem.name.split(' ').join('_')
+                        .form-group
+                            .hidden.supports-nums #{item.supports_nums}
+                            each size in subitem.sizes
+                                .size
+                                    .hidden.item-name #{sanitized_subitem_name}-#{size}
+                                    .form-group.col-xs-offset-1
+                                        label= size
+                                        - var found_sub_item = false
+                                        if order.items
+                                            each order_item in order.items
+                                                if (order_item.id.toString() === subitem.subitem_id.toString() && order_item.size === size)
+                                                    input.form-control.quantity(type='number' name='quantity-#{size}-#{subitem.subitem_id}' min='0' max='20', value='#{order_item.quantity}')
+                                                    - var count = 1
+                                                    each number in order_item.numbers
+                                                        .form-group.col-xs-offset-1.number
+                                                            if count === 1
+                                                                br
+                                                            label Number:
+                                                            input.form-control(type='number' name='number-#{size}-#{count}-#{subitem.subitem_id}' value='#{number}' placeholder='Number')
+                                                            - count++
+                                                    - found_sub_item = true
+
+                                        unless found_sub_item
+                                            input.form-control.quantity(type='number' name='quantity-#{size}-#{subitem.subitem_id}' min='0' max='20' value='0')
         if can_submit
             button.btn.btn-primary(type='submit') Submit
         else
