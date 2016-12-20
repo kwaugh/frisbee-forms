@@ -20,6 +20,7 @@ block content
                     if item.subitems.length !== 0
                         button.btn.btn-default.toggle-subitems(type='button')
                             span.glyphicon.glyphicon-menu-down(aria-hidden='true')
+                        &nbsp
                     if item.photo_path
                         span.popover-wrap(id='#{sanitized_name}')
                             span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />')
