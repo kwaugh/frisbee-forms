@@ -93,16 +93,16 @@ router.all('/', upload.any(), function(req, res, next) {
                         var subitem_name = '';
                         switch(number_option) {
                             case 'fb':
-                                subitem_name = item_name + ' with front and back numbers';
+                                subitem_name = 'With front and back numbers';
                                 break;
                             case 'f':
-                                subitem_name = item_name + ' with front number';
+                                subitem_name = 'With front number';
                                 break;
                             case 'b':
-                                subitem_name = item_name + ' with back number';
+                                subitem_name = 'With back number';
                                 break;
                             case 'n':
-                                subitem_name = item_name + ' with no numbers';
+                                subitem_name = 'With no numbers';
                                 break;
                         }
                         auto_gen_subitems.push(
@@ -154,7 +154,6 @@ function validateParams(req, paramsList) {
 }
 
 function addAutoGenToItems(item, auto_gen_subitems) {
-    console.log('item:' , item);
     if (item.subitems.length == 0) {
         for (var auto_gen of auto_gen_subitems) {
             item.subitems.push(auto_gen);
