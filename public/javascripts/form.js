@@ -2,7 +2,7 @@ $(function() {
     // var img = "<img src='/photos/61e7e4d88927d7eb511fe05b0da95b2c' height=512 width=512/>";
     var width = $(window).width() - 50;
     console.log('width:', width);
-    $('.popover-photo').popover({trigger: 'hover click', html : true});
+    $('.popover-photo').popover({trigger: 'click', html : true});
     $('.popover-photo').each(function() {
         var img = $(this).attr('data-content');
         var html = $.parseHTML(img);

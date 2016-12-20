@@ -16,7 +16,12 @@ block content
         each item in form.items
             - var sanitized_name = item.name.split(' ').join('_')
             if item.photo_path
-                h3
+                h3 #{item.name} &nbsp
+                    span.popover-wrap(id='#{sanitized_name}')
+                        span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />')
+                            button.btn.btn-default(type='button' aria-lable='Left Align')
+                                span.glyphicon.glyphicon-picture(aria-hidden='true')
+                //- h3
                     div.popover-wrap(id='#{sanitized_name}')
                         span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />') #{item.name}
             else
