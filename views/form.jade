@@ -17,10 +17,9 @@ block content
             div
                 - var sanitized_name = item.name.split(' ').join('_')
                 h3 #{item.name} &nbsp
-                    if item.subitems.length !== 0
-                        button.btn.btn-default.toggle-subitems(type='button')
-                            span.glyphicon.glyphicon-menu-down(aria-hidden='true')
-                        &nbsp
+                    button.btn.btn-default.toggle-expansion(type='button')
+                        span.glyphicon.glyphicon-menu-down(aria-hidden='true')
+                    &nbsp
                     if item.photo_path
                         span.popover-wrap(id='#{sanitized_name}')
                             span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />')
@@ -31,7 +30,7 @@ block content
                             span.popover-photo(data-container='##{sanitized_name}' data-toggle='popover' data-placement='bottom' data-content='<img src=\'#{item.photo_path}\' width=512 />') #{item.name}
                 each size in item.sizes
                     .hidden.supports-nums #{item.supports_nums}
-                    .size
+                    .size.hidden
                         .hidden.item-name #{sanitized_name}-#{size}
                         .form-group.col-xs-offset-1
                             label= size
