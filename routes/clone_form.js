@@ -23,7 +23,7 @@ router.all('/', function(req, res, next) {
         var new_name = orig_form.name + "_clone";
         var form_clone = orig_form;
         form_clone.name = new_name;
-        delete form_clone['_id'];
+        delete form_clone._id;
         forms.save(form_clone);
     });
 

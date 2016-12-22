@@ -22,10 +22,10 @@ router.all('/', upload.any(), function(req, res, next) {
     var form = {name: req.body['form-name'], items: [], live: false,
         team_id: ObjectID(req.session.team_id)};
     if (hasParam(req, 'form-id')) { // updating existing form
-        form['_id'] = new ObjectID(req.body['form-id']);
+        form._id = new ObjectID(req.body['form-id']);
     }
 
-    forms.findOne({_id: form['_id']}, function(err, the_form) {
+    forms.findOne({_id: form._id}, function(err, the_form) {
         var id_to_item = {};
         if (the_form) {
             for (var item of the_form.items) {
@@ -78,7 +78,7 @@ router.all('/', upload.any(), function(req, res, next) {
                     console.error('number-options should not be submitted with existing item');
                 } else { // new item
                     var item_name = form.items[current_item_num].name;
-                    for (number_option of req.body[key]) {
+                    for (var number_option of req.body[key]) {
                         var subitem_id = new ObjectID();
                         var subitem_name = '';
                         switch(number_option) {

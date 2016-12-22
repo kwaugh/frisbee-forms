@@ -18,9 +18,9 @@ router.get('/', function(req, res, next) {
             for (var form of the_forms) {
                 if (!form.live) continue;
                 if (new Date() < form.date) {
-                    separated_team_forms[form.team_id]['open_forms'].push(form);
+                    separated_team_forms[form.team_id].open_forms.push(form);
                 } else {
-                    separated_team_forms[form.team_id]['closed_forms'].push(form);
+                    separated_team_forms[form.team_id].closed_forms.push(form);
                 }
             }
             res.render('index', {'separated_forms': separated_team_forms});

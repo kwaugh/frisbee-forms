@@ -12,7 +12,7 @@ router.all('/', function(req, res, next) {
         return;
     }
     var password = req.body['admin-password'];
-    var team = req.body['team'];
+    var team = req.body.team;
     if (password && password !== '' && team && team !== '') {
         admins.findOne({'password': password, 'team': team}, function(err, admin) {
             if (admin) {

@@ -204,8 +204,8 @@ function export_version_2(form_name, req, res, next) {
             // store in aggregated_data
             for (var order of the_orders) {
                 for (var item of order.items) {
-                    var sanitized_quantity = isNaN(parseInt(item.quantity))
-                        ? 0 : parseInt(item.quantity);
+                    var sanitized_quantity = isNaN(parseInt(item.quantity)) ?
+                        0 : parseInt(item.quantity);
                     aggregated_data[item.id][item.size].quantity += sanitized_quantity;
                     aggregated_data[item.id].quantity += sanitized_quantity;
                     aggregated_data.quantity += sanitized_quantity;
@@ -238,7 +238,7 @@ function export_version_2(form_name, req, res, next) {
                     }
                 }
             }
-            csv += '\n' + 'Total,' + aggregated_data.quantity + '\n'
+            csv += '\n' + 'Total,' + aggregated_data.quantity + '\n';
 
             // download the new file
             saveFile('./data_' + req.sessionId, form_name, csv, res);

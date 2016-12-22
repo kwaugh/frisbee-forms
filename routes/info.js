@@ -4,8 +4,8 @@ var router = express.Router();
 var names = DB.collection('names');
 
 router.all('/', function(req, res, next) {
-    var form = req.body['form'];
-    if (!form || form == null) {
+    var form = req.body.form;
+    if (!form || form === null) {
         res.redirect('/');
         return;
     }

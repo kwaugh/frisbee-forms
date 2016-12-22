@@ -10,7 +10,7 @@ router.all('/', function(req, res, next) {
         res.render('form_submit_error', {error_message: ''});
         return;
     }
-    DB.collection('admins').findOne({team: req.body['team']}, function(err, admin) {
+    DB.collection('admins').findOne({team: req.body.team}, function(err, admin) {
         if (err || !admin) {
             res.render('form_submit_error', {error_message: 'Couldn\'t find admin.'});
             return;
