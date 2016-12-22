@@ -7,24 +7,24 @@ var orders = DB.collection('orders');
 
 /* User page for filling out forms */
 router.all('/', function(req, res, next) {
-    var form = req.body['form'];
+    var form = req.body.form;
     var textbox_firstname = req.body['textbox-firstname'] ?
         req.body['textbox-firstname'].trim() : '';
     var textbox_lastname = req.body['textbox-lastname'] ?
         req.body['textbox-lastname'].trim() : '';
     var select_name = req.body['select-name'];
     var jersey_number = req.body['default-jersey-number'];
-    var team = req.body['team'];
-    var phone = req.body['phone'];
-    var email = req.body['email'];
+    var team = req.body.team;
+    var phone = req.body.phone;
+    var email = req.body.email;
     if (!isValidForm(form, textbox_firstname, textbox_lastname, select_name,
             jersey_number, team, phone, email)) {
         res.redirect('/');
         return;
     }
     var textbox_name = textbox_firstname.charAt(0).toUpperCase() +
-    textbox_firstname.slice(1) + ' ' + textbox_lastname.charAt(0).toUpperCase()
-    + textbox_lastname.slice(1);
+    textbox_firstname.slice(1) + ' ' + textbox_lastname.charAt(0).toUpperCase() +
+    textbox_lastname.slice(1);
     var name = '';
     /* Default to select name if it is filled out */
     if (select_name && select_name !== null && select_name !== 'Custom') {
