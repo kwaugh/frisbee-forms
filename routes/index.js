@@ -13,9 +13,10 @@ router.get('/', function(req, res, next) {
                 var key = admin.team;
                 separated_team_forms[key] = {'team': key, 'open_forms': [], 'closed_forms': []};
             }
+            var now = new Date();
             for (var form of the_forms) {
-                if (form.live) {
-                    console.log('form.team:', form.team);
+                if (!form.live) continue;
+                if (now.getTime() < form.date.getTime()) {
                     separated_team_forms[form.team]['open_forms'].push(form);
                 } else {
                     separated_team_forms[form.team]['closed_forms'].push(form);
