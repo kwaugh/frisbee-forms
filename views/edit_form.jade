@@ -18,7 +18,7 @@ block content
                         h4.modal-title.text-center Confirm Deletion
                     div.modal-body
                         form(method='post' action='form_delete')
-                            input(type='hidden' name='form-name' value='#{form.name}')
+                            input(type='hidden' name='form-id' value='#{form._id}')
                             input.btn.btn-danger.center-block(type='submit' name='submit' value='Delete')
         div(class='modal fade delete-responses-form' tabindex='-1' role='dialog' aria-labelledby='delete-responses-form')
             div.modal-dialog.modal-sm
@@ -29,7 +29,7 @@ block content
                         h4.modal-title.text-center Confirm Deletion Of Responses
                     div.modal-body
                         form(method='post' action='form_delete_responses')
-                            input(type='hidden' name='form-name' value='#{form.name}')
+                            input(type='hidden' name='form-id' value='#{form._id}')
                             input.btn.btn-danger.center-block(type='submit' name='submit' value='Delete')
         div(class='modal fade clone-form' tabindex='-1' role='dialog' aria-labelledby='clone-form')
             div.modal-dialog.modal-sm
@@ -40,7 +40,7 @@ block content
                         h4.modal-title.text-center Confirm Clone Form
                     div.modal-body
                         form(method='post' action='clone_form')
-                            input(type='hidden' name='form-name' value='#{form.name}')
+                            input(type='hidden' name='form-id' value='#{form._id}')
                             input.btn.btn-success.center-block(type='submit' name='submit' value='Clone')
 
 
@@ -76,38 +76,38 @@ block content
                     input.form-control(type='text' id='item-#{item_num}' name='item-num-#{item_num}' placeholder='Item' value='#{item.name}' required)
                     input(type='hidden' name='id-item-num-#{item_num}' value='#{item.item_id}')
                 if item.subitems.length === 0
-                    // Put the select here 
+                    // Put the select here
                     .form-group.item-sizes
                         label Available Sizes:
                         select.form-control.tall-select(multiple required name='item-size-#{item_num}')
                             if item.sizes.indexOf('') !== -1
                                 option(value='' selected) N/A
-                            else 
+                            else
                                 option(value='') N/A
 
                             if item.sizes.indexOf('XS') !== -1
                                 option(value='XS' selected) X-Small
-                            else 
+                            else
                                 option(value='XS') X-Small
 
                             if item.sizes.indexOf('S') !== -1
                                 option(value='S' selected) Small
-                            else 
+                            else
                                 option(value='S') Small
 
                             if item.sizes.indexOf('M') !== -1
                                 option(value='M' selected) Medium
-                            else 
+                            else
                                 option(value='M') Medium
 
                             if item.sizes.indexOf('L') !== -1
                                 option(value='L' selected) Large
-                            else 
+                            else
                                 option(value='L') Large
 
                             if item.sizes.indexOf('XL') !== -1
                                 option(value='XL' selected) X-Large
-                            else 
+                            else
                                 option(value='XL') X-Large
 
                 .form-group
@@ -125,36 +125,36 @@ block content
                                     select.form-control.tall-select(multiple required name='subitem-size-#{subitem_num}')
                                         if subitem.sizes.indexOf('') !== -1
                                             option(value='' selected) N/A
-                                        else 
+                                        else
                                             option(value='') N/A
 
                                         if subitem.sizes.indexOf('XS') !== -1
                                             option(value='XS' selected) X-Small
-                                        else 
+                                        else
                                             option(value='XS') X-Small
 
                                         if subitem.sizes.indexOf('S') !== -1
                                             option(value='S' selected) Small
-                                        else 
+                                        else
                                             option(value='S') Small
 
                                         if subitem.sizes.indexOf('M') !== -1
                                             option(value='M' selected) Medium
-                                        else 
+                                        else
                                             option(value='M') Medium
 
                                         if subitem.sizes.indexOf('L') !== -1
                                             option(value='L' selected) Large
-                                        else 
+                                        else
                                             option(value='L') Large
 
                                         if subitem.sizes.indexOf('XL') !== -1
                                             option(value='XL' selected) X-Large
-                                        else 
+                                        else
                                             option(value='XL') X-Large
 
                     button.btn.btn-info.add-subitem Add Sub Item
-                
+
 
         .form-group
             button.btn.btn-primary#add-item Add Item

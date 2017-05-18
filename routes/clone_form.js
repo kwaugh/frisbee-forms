@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var forms = DB.collection('forms');
+var ObjectID = require('mongodb').ObjectID;
 
 /* Clone the specified form */
 router.all('/', function(req, res, next) {
@@ -9,12 +10,12 @@ router.all('/', function(req, res, next) {
         res.redirect('admin');
         return;
     }
-    var form = req.body['form-name'];
+    var form = new ObjectID(req.body['form-id']);
     if (!form || form === null || form.length === 0) {
         res.redirect('admin');
         return;
     }
-    forms.findOne({name: form, team: req.session.team}, function(err, orig_form) {
+    forms.findOne({_id: form, team: req.session.team}, function(err, orig_form) {
         if (!form || err) {
             res.redirect('admin');
             return;
