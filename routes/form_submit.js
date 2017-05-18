@@ -3,6 +3,7 @@ var router = express.Router();
 var ObjectID = require('mongodb').ObjectID;
 
 var orders = DB.collection('orders');
+var forms = DB.collection('forms');
 
 /* Page to validate user form submissions */
 router.all('/', function(req, res, next) {
