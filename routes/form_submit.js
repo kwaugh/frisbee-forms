@@ -18,9 +18,9 @@ router.all('/', function(req, res, next) {
         if (key.indexOf('name') === 0) {
             order.player_name = req.body[key]; 
         } else if (key.indexOf('quantity') === 0) {
-            var id_start_pos = key.indexOf('-', key.indexOf('-') + 1);
+            var id_start_pos = key.indexOf('\-', key.indexOf('\-') + 1);
             var id = ObjectID(key.substring(id_start_pos + 1));
-            var size = key.substring(key.indexOf('-') + 1, id_start_pos);
+            var size = key.substring(key.indexOf('\-') + 1, id_start_pos);
             var quantity = req.body[key];
             var item = {'id': id, 'size': size, 'quantity': quantity, numbers: []};
             order.items.push(item);
