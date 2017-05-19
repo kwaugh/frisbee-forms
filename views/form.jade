@@ -13,6 +13,7 @@ block content
         input(type='hidden' value='#{name}' name='name')
         input(type='hidden' value='#{form._id}' name='form-id')
         input(type='hidden' value='#{team}' name='team')
+        input(type='hidden' value='#{team_id}' name='team-id')
         each item in form.items
             div
                 - var sanitized_name = item.name.split(' ').join('_')

@@ -71,6 +71,7 @@ router.all('/', function(req, res, next) {
                 'default_number': jersey_number,
                 'name': name,
                 'team': team,
+                'team_id': form.team_id,
                 'order': order,
                 'can_submit': can_submit,
                 'close_date': close_date.toString()
