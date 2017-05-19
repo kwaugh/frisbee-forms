@@ -18,12 +18,8 @@ router.all('/', function(req, res, next) {
     }
     console.log('form:', form);
     console.log('team_id:', req.session.team_id);
-    forms.find({_id: form, team_id: req.session.team_id}, function(err, forms_to_delete) {
-        for (var form of forms_to_delete) {
-            orders.remove({form_id: form._id, team: req.session.team});
-            forms.remove({_id: form._id, team: req.session.team});
-        }
-    });
+    orders.remove({'form_id': form});
+    forms.remove({'_id': form});
 
     res.redirect('/admin');
 });
