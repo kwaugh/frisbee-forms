@@ -7,11 +7,11 @@ var forms = DB.collection('forms');
 
 /* Page to validate user form submissions */
 router.all('/', function(req, res, next) {
-    if (!validateParams(req, ['team', 'form-id'])) {
+    if (!validateParams(req, ['team-id', 'form-id'])) {
         res.render('form_submit_error', {error_message: ''});
         return;
     }
-    DB.collection('admins').findOne({team: req.body.team}, function(err, admin) {
+    DB.collection('admins').findOne({_id: new ObjectID(req.body['team-id'])}, function(err, admin) {
         if (err || !admin) {
             res.render('form_submit_error', {error_message: 'Couldn\'t find admin.'});
             return;
@@ -38,15 +38,15 @@ router.all('/', function(req, res, next) {
         DB.collection('forms').findOne({'_id': ObjectID(form_id), team_id: admin._id},
                 function(err, form) {
             if (err || !form) {
-                console.log('db error');
-                console.log('admin:', admin);
-                console.log('team_id:', admin._id);
-                console.log('form_id:', form_id);
+                console.error('db error');
+                console.error('admin:', admin);
+                console.error('team_id:', admin._id);
+                console.error('form_id:', form_id);
                 res.render('form_submit_error', {error_message: ''});
                 return;
             }
             if (Date.now() > new Date(form.date) || !form.live) {
-                console.log('date error');
+                console.error('date error');
                 res.redirect('form_submit_error',
                         {error_message: 'You cannot submit an order for a closed form.'}
                         ); // the form is closed

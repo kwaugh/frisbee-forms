@@ -30,8 +30,8 @@ $(function() {
         } 
     });
         $('.toggle-expansion').click(function() {
-            $(this).parent().siblings('.subitems:first').toggleClass('hidden');
-            $(this).parent().siblings('.size:first').toggleClass('hidden');
+            $(this).parent().siblings('.subitems').toggleClass('hidden');
+            $(this).parent().siblings('.size').toggleClass('hidden');
             $(this).children('span.glyphicon:first').toggleClass('glyphicon-menu-up');
             $(this).children('span.glyphicon:first').toggleClass('glyphicon-menu-down');
         });

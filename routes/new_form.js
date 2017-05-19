@@ -113,7 +113,7 @@ router.all('/', upload.any(), function(req, res, next) {
             }
         }
         // handle any dangling auto generated items
-        if (auto_gen_subitems !== []) { // save to previous item
+        if (auto_gen_subitems.length !== 0) { // save to previous item
             addAutoGenToItems(form.items[current_item_num], auto_gen_subitems);
         }
         for (var file of req.files) { // these are the picture uploads
@@ -168,6 +168,5 @@ function addAutoGenToItems(item, auto_gen_subitems) {
 }
 
 function deepClone(a) {
-       return JSON.parse(JSON.stringify(a));
-
+    return JSON.parse(JSON.stringify(a));
 }
