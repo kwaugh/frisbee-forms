@@ -5,9 +5,6 @@ block header
     script(src='/javascripts/new_form.js')
 block content
     h1 Edit Form: #{form.name}
-        button.btn.btn-danger.pull-right(type='button' data-toggle='modal' data-target='.delete-form') Delete Form
-        button.btn.btn-warning.pull-right(type='button' data-toggle='modal' data-target='.delete-responses-form') Delete All Responses
-        button.btn.btn-info.pull-right(type='button' data-toggle='modal' data-target='.clone-form') Clone Form
         //- Delete form modal
         div(class='modal fade delete-form' tabindex='-1' role='dialog' aria-labelledby='delete-form')
             div.modal-dialog.modal-sm
@@ -46,9 +43,10 @@ block content
                             input.btn.btn-success.center-block(type='submit' name='submit' value='Clone')
 
 
-    div.alert.alert-danger
-        strong Warning!
-        span &nbsp Do not include hyphens in any of the item names!
+    div
+        button.btn.btn-danger.pull-right(type='button' data-toggle='modal' data-target='.delete-form') Delete Form
+        button.btn.btn-warning.pull-right(type='button' data-toggle='modal' data-target='.delete-responses-form') Delete All Responses
+        button.btn.btn-info(type='button' data-toggle='modal' data-target='.clone-form') Clone Form
     hr
     form(method='post' action='new_form' enctype='multipart/form-data')
         input(type='hidden' name='form-id' value='#{form_id}')
