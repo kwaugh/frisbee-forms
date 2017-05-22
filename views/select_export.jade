@@ -9,9 +9,9 @@ block content
     form(method='post' action='/export')
         .form-group
             label Form:
-            select.form-control(name='form-name')
+            select.form-control(name='form-id')
                 each form in forms
-                    option(value='#{form.name}') #{form.name}
+                    option(value='#{form._id}') #{form.name}
             br
             label Export Version:
             select.form-control(name='export-version')

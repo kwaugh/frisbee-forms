@@ -12,15 +12,16 @@ router.all('/', function(req, res, next) {
         res.redirect('/admin');
         return;
     }
-    var form_name = req.body['form-name'];
+    var form_id = ObjectID(req.body['form-id']);
     var export_version = req.body['export-version'];
     var export_handlers = {
-        '1': function() { export_version_1(form_name, req, res, next); },
-        '2': function() { export_version_2(form_name, req, res, next); }
+        '1': function() { export_version_1(form_id, req, res, next); },
+        '2': function() { export_version_2(form_id, req, res, next); }
     };
-    if (!form_name || form_name === '' || !export_version ||
-        !(export_version in export_handlers))
-    {
+    if (!form_id || form_id === '' || !export_version ||
+            !(export_version in export_handlers)) {
+        console.log('form_id:', form_id);
+        console.log('export_version:', export_version);
         res.redirect('/admin');
         return;
     }
@@ -28,9 +29,9 @@ router.all('/', function(req, res, next) {
 });
 
 /* Orders for each person */
-function export_version_1(form_name, req, res, next) {
+function export_version_1(form_id, req, res, next) {
     // Build the CSV string
-    forms.findOne({'name': form_name, team_id: ObjectID(req.session.team_id)}, function(err, form) {
+    forms.findOne({_id: form_id, team_id: ObjectID(req.session.team_id)}, function(err, form) {
         if (err || !form) {
             res.redirect('/admin');
             return;
@@ -98,6 +99,8 @@ function export_version_1(form_name, req, res, next) {
         
         orders.find({'form_id': form._id}, function(err, the_orders) {
             if (err || !the_orders) {
+                console.log('export version 2: couldnt find form');
+                console.log('err:', err);
                 res.redirect('/admin');
                 return;
             }
@@ -150,7 +153,7 @@ function export_version_1(form_name, req, res, next) {
                 }
                 csv += '\n';
             }
-            saveFile('./data_' + req.sessionId, form_name, csv, res);
+            saveFile('./data_' + req.sessionId, form.name, csv, res);
         });
 
     });
@@ -158,24 +161,23 @@ function export_version_1(form_name, req, res, next) {
 }
 
 /* aggregated orders per item */
-function export_version_2(form_name, req, res, next) {
+function export_version_2(form_id, req, res, next) {
     // Build the CSV string
-    forms.findOne({'name': form_name, team_id: ObjectID(req.session.team_id)}, function(err, form) {
+    forms.findOne({_id: form_id, team_id: ObjectID(req.session.team_id)}, function(err, form) {
         if (err || !form) {
             res.redirect('/admin');
             return;
         }
 
-        var csv = '';
-
         // Build the first row
-        csv += ',Quantity,Numbers\n';
+        var csv = ',Quantity,Numbers\n';
 
         var id_to_name = {};
-
         var aggregated_data = {'quantity': 0};
         for (var item of form.items) {
             if (item.subitems && item.subitems.length !== 0) { // has subitems
+                console.log('item:', item);
+                console.log('subitems:', item.subitems);
                 for (var subitem of item.subitems) {
                     id_to_name[subitem.subitem_id] = item.name + ' ' + subitem.name;
                     aggregated_data[subitem.subitem_id] = {quantity: 0};
@@ -199,7 +201,10 @@ function export_version_2(form_name, req, res, next) {
         }
         // built aggregated_data. time to populate it
 
-        orders.find({'form_id': form._id}, function(err, the_orders) {
+        orders.find({'form_id': form_id}, function(err, the_orders) {
+            if (err || !the_orders) {
+                console.log('couldnt find any relevant orders');
+            }
             // grab the quantity and numbers from each
             // store in aggregated_data
             for (var order of the_orders) {
@@ -210,7 +215,7 @@ function export_version_2(form_name, req, res, next) {
                     aggregated_data[item.id].quantity += sanitized_quantity;
                     aggregated_data.quantity += sanitized_quantity;
                     aggregated_data[item.id][item.size].numbers =
-                        aggregated_data[item.id][item.size].  numbers.concat(item.numbers);
+                        aggregated_data[item.id][item.size].numbers.concat(item.numbers);
                 }
             }
             // aggregated data is populated. time to generate csv
@@ -241,7 +246,7 @@ function export_version_2(form_name, req, res, next) {
             csv += '\n' + 'Total,' + aggregated_data.quantity + '\n';
 
             // download the new file
-            saveFile('./data_' + req.sessionId, form_name, csv, res);
+            saveFile('./data_' + req.sessionId, form.name, csv, res);
         });
 
     });

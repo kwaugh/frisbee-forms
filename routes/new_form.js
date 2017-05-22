@@ -79,7 +79,6 @@ router.all('/', upload.any(), function(req, res, next) {
                 } else { // new item
                     var item_name = form.items[current_item_num].name;
                     for (var number_option of req.body[key]) {
-                        var subitem_id = new ObjectID();
                         var subitem_name = '';
                         switch(number_option) {
                             case 'fb':
@@ -96,7 +95,7 @@ router.all('/', upload.any(), function(req, res, next) {
                                 break;
                         }
                         auto_gen_subitems.push(
-                            {name: subitem_name, sizes: [], 'subitem_id': subitem_id}
+                            {name: subitem_name, sizes: [], 'subitem_id': new ObjectID()}
                         );
                     }
                 }
@@ -156,6 +155,7 @@ function addAutoGenToItems(item, auto_gen_subitems) {
             for (var auto_gen of auto_gen_subitems) {
                 var auto_gen_clone = deepClone(auto_gen);
                 auto_gen_clone.sizes = subitem.sizes;
+                auto_gen_clone.subitem_id = new ObjectID();
                 to_save.push(auto_gen_clone);
                 to_save[to_save.length - 1].name += ' ' + subitem.name;
             }
