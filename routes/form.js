@@ -65,7 +65,7 @@ router.all('/', function(req, res, next) {
             if (err || !order) {
                 order = {};
             }
-            res.render('form', {
+            res.render('fill_form', {
                 'title': form.name + ' Order Form',
                 'form': form,
                 'default_number': jersey_number,
