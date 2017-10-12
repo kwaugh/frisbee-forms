@@ -119,6 +119,11 @@ block content
                             else
                                 option(value='XL') X-Large
 
+                            if item.sizes.indexOf('XXL') !== -1
+                                option(value='XXL' selected) X-X-Large
+                            else
+                                option(value='XXL') X-X-Large
+
                 .form-group
                     each subitem in item.subitems
                         - subitem_num++
@@ -161,6 +166,11 @@ block content
                                             option(value='XL' selected) X-Large
                                         else
                                             option(value='XL') X-Large
+
+                                        if subitem.sizes.indexOf('XXL') !== -1
+                                            option(value='XXL' selected) X-X-Large
+                                        else
+                                            option(value='XXL') X-X-Large
 
                     button.btn.btn-info.add-subitem Add Sub Item
 

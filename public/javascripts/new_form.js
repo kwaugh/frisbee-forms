@@ -18,6 +18,7 @@ $(function() {
             <option value='M'>Medium</option> \
             <option value='L'>Large</option> \
             <option value='XL'>X-Large</option> \
+            <option value='XXL'>X-X-Large</option> \
             </select> \
         </div> \
     ";
