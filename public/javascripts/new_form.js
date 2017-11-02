@@ -19,6 +19,12 @@ $(function() {
             <option value='L'>Large</option> \
             <option value='XL'>X-Large</option> \
             <option value='XXL'>X-X-Large</option> \
+            <option value='Women XS'>Women X-Small</option> \
+            <option value='Women S'>Women Small</option> \
+            <option value='Women M'>Women Medium</option> \
+            <option value='Women L'>Women Large</option> \
+            <option value='Women XL'>Women X-Large</option> \
+            <option value='Women XXL'>Women X-X-Large</option> \
             </select> \
         </div> \
     ";
