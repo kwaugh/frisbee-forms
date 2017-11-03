@@ -14,8 +14,10 @@ $(function() {
             $("#default-jersey-number").val('');
         }
         updateInput('team');
+        /*
         updateInput('phone');
         updateInput('email');
+        */
     });
 });
 

@@ -18,7 +18,7 @@ block content
                 option(selected) Custom
                 - var index = 0
                 each name in names
-                    option(value='#{name.name}' id='#{index}-name' team='#{name.team}' phone='#{name.phone}' email='#{name.email}') #{name.name}
+                    option(value='#{name.name}' id='#{index}-name' team='#{name.team}') #{name.name}
                     - index++
             - var index = 0
             each name in names
