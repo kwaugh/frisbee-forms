@@ -202,6 +202,37 @@ block content
                                         else
                                             option(value='XXL') X-X-Large
 
+                                        //- Womens sizes
+                                        if subitem.sizes.indexOf('Women XS') !== -1
+                                            option(value='Women XS' selected) Women X-Small
+                                        else
+                                            option(value='Women XS') Women X-Small
+
+                                        if subitem.sizes.indexOf('Women S') !== -1
+                                            option(value='Women S' selected) Women Small
+                                        else
+                                            option(value='Women S') Women Small
+
+                                        if subitem.sizes.indexOf('Women M') !== -1
+                                            option(value='Women M' selected) Women Medium
+                                        else
+                                            option(value='Women M') Women Medium
+
+                                        if subitem.sizes.indexOf('Women L') !== -1
+                                            option(value='Women L' selected) Women Large
+                                        else
+                                            option(value='Women L') Women Large
+
+                                        if subitem.sizes.indexOf('Women XL') !== -1
+                                            option(value='Women XL' selected) Women X-Large
+                                        else
+                                            option(value='Women XL') Women X-Large
+
+                                        if subitem.sizes.indexOf('Women XXL') !== -1
+                                            option(value='Women XXL' selected) Women X-X-Large
+                                        else
+                                            option(value='Women XXL') Women X-X-Large
+
                     button.btn.btn-info.add-subitem Add Sub Item
 
 
