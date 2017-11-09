@@ -134,24 +134,43 @@ function export_version_1(form_id, req, res, next) {
                     }
                     last_team_name = order.team;
                 }
-                csv += order.player_name + ',';
+                // dirty way to fix empty orders:
+                var at_least_one_order = false;
+                outer_most:
                 for (var item_id in item_order) { // loop through in right order
-                    size_loop:
                     for (var item_size in item_order[item_id]) {
                         for (var item of order.items) {
                             if (item.id.equals(item_id) && item.size === item_size) {
                                 if (item.quantity == 0) {
-                                    csv += ',,';
                                 } else {
-                                    csv += item.quantity + ',"' +
-                                           item.numbers.toString() + '",';
+                                    at_least_one_order = true;
+                                    break outer_most;
                                 }
-                                continue size_loop;
                             }
                         }
                     }
                 }
-                csv += '\n';
+
+                if (at_least_one_order) {
+                    csv += order.player_name + ',';
+                    for (var item_id in item_order) { // loop through in right order
+                        size_loop:
+                        for (var item_size in item_order[item_id]) {
+                            for (var item of order.items) {
+                                if (item.id.equals(item_id) && item.size === item_size) {
+                                    if (item.quantity == 0) {
+                                        csv += ',,';
+                                    } else {
+                                        csv += item.quantity + ',"' +
+                                            item.numbers.toString() + '",';
+                                    }
+                                    continue size_loop;
+                                }
+                            }
+                        }
+                    }
+                    csv += '\n';
+                }
             }
             saveFile('./data_' + req.sessionId, form.name, csv, res);
         });
