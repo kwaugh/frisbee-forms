@@ -60,7 +60,7 @@ router.all('/', function(req, res, next) {
             return;
         }
         var close_date = new Date(form.date);
-        var can_submit = Date.now() < close_date;
+        var can_submit = Date.now() < close_date || req.session.admin;
         orders.findOne({player_name: name, form_id: form._id}, function(err, order){
             if (err || !order) {
                 order = {};

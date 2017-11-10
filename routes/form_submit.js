@@ -45,7 +45,7 @@ router.all('/', function(req, res, next) {
                 res.render('form_submit_error', {error_message: ''});
                 return;
             }
-            if (Date.now() > new Date(form.date) || !form.live) {
+            if (!req.session.admin && (Date.now() > new Date(form.date) || !form.live)) {
                 console.error('date error');
                 res.redirect('form_submit_error',
                         {error_message: 'You cannot submit an order for a closed form.'}
