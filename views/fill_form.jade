@@ -40,6 +40,7 @@ block content
                             if order.items
                                 each order_item in order.items
                                     if (order_item.id.toString() === item.item_id.toString() && order_item.size === size)
+                                        label Quantity:
                                         input.form-control.quantity(type='number' name='quantity\-#{size}\-#{item.item_id}' min='0' max='20', value='#{order_item.quantity}')
                                         - var count = 1
                                         if (sanitized_name.indexOf('no_numbers') === -1)
@@ -53,6 +54,7 @@ block content
                                         - found_item = true
 
                             unless found_item
+                                label Quantity:
                                 input.form-control.quantity(type='number' name='quantity\-#{size}\-#{item.item_id}' min='0' max='20', value='0')
                 div.hidden.subitems
                     each subitem in item.subitems
