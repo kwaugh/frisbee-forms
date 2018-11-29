@@ -27,13 +27,13 @@ block content
         .form-group.text-muted.col-md-12 OR
         .form-group.col-md-6
             label First Name:
-            input.form-control.textbox-name(type='text' name='textbox-firstname' placeholder='First Name')
+            input.form-control.textbox-name(type='text' name='textbox-firstname' placeholder='First Name' required)
         .form-group.col-md-6
             label Last Name:
-            input.form-control.textbox-name(type='text' name='textbox-lastname' placeholder='Last Name')
+            input.form-control.textbox-name(type='text' name='textbox-lastname' placeholder='Last Name' required)
         .form-group.col-md-6
             label Default Jersey Number:
-            input.form-control(type='number' min='0' max='99' name='default-jersey-number' id='default-jersey-number' placeholder='Number' title='Please enter your ten digit phone number with no hyphens' required)
+            input.form-control(type='number' min='0' max='99' name='default-jersey-number' id='default-jersey-number' placeholder='Number' required)
         .form-group.col-md-6
             label Team:
             select.form-control#team(name='team' required)
@@ -46,7 +46,7 @@ block content
                 option#Alumni(value='Alumni') Alumni
         .form-group.col-md-6
             label Phone Number:
-            input.form-control#phone(type='tel' pattern='[0-9]{3}[0-9]{3}[0-9]{4}' name='phone' placeholder='1234567890' required)
+            input.form-control#phone(type='tel' pattern='1?[0-9]{3}[0-9]{3}[0-9]{4}' name='phone' placeholder='1234567890' title='Please enter your ten digit phone number with no hyphens' required)
         .form-group.col-md-6
             label Email Address:
             input.form-control#email(type='email' pattern='.+@.+\..+' name='email' placeholder='Email' required)
