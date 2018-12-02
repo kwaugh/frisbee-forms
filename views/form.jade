@@ -7,6 +7,7 @@ block header
 block content
     h1= title
     h3.text-warning Orders Close on #{close_date}
+    h4.text-info The number after the hyphen is the estimated price
     hr
     input#default-number(type='hidden' value='#{default_number}')
     form(method='post' action='form_submit')
