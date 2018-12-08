@@ -12,6 +12,9 @@ router.all('/', function(req, res, next) {
 
     forms.find({team_id: ObjectID(req.session.team_id)}, function(err, docs) {
         if (!err && docs) {
+            docs.sort(function(a, b) {
+               return a.name > b.name;
+            });
             res.render('select_export', {forms: docs});
         } else {
             res.redirect('/admin');
