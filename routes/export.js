@@ -153,9 +153,18 @@ function export_version_1(form_id, req, res, next) {
 
                 if (at_least_one_order) {
                     csv += order.player_name + ',';
-                    for (var item_id in item_order) { // loop through in right order
+                    // get correct item ordering
+                    for (var item_id in item_order) {
                         size_loop:
+                        // get correct size ordering
                         for (var item_size in item_order[item_id]) {
+                            // this variable is used to make sure the columns
+                            // align for orders that were submitted before the
+                            // form was updated. If more sizing options are
+                            // added after orders have come in, we need to pad
+                            // the row with extra commas so the order aligns
+                            // with the proper column header.
+                            var appendedToCSV = false;
                             for (var item of order.items) {
                                 if (item.id.equals(item_id) && item.size === item_size) {
                                     if (item.quantity == 0) {
@@ -164,8 +173,12 @@ function export_version_1(form_id, req, res, next) {
                                         csv += item.quantity + ',"' +
                                             item.numbers.toString() + '",';
                                     }
+                                    appendedToCSV = true;
                                     continue size_loop;
                                 }
+                            }
+                            if (!appendedToCSV) {
+                                csv += ',,';
                             }
                         }
                     }
