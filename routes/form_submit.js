@@ -17,7 +17,8 @@ router.all('/', function(req, res, next) {
             return;
         }
         var form_id = req.body['form-id'];
-        var order = {team_id: admin._id, items: []};
+        var team_id = req.body['team-id'];
+        var order = {'team_id': team_id, items: []};
         var item_num = -1;
         for (var key in req.body) {
             if (key.indexOf('name') === 0) {

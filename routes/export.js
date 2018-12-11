@@ -105,7 +105,7 @@ function export_version_1(form_id, req, res, next) {
                 return;
             }
             the_orders.sort(function(a, b) {
-                if (a.team == b.team) {
+                if (a.team_id.valueOf() == b.team_id.valueOf()) {
                     // Sort by first name
                     // TODO: Store first and last name separately in DB
                     a_first_name = a.player_name.
@@ -119,20 +119,20 @@ function export_version_1(form_id, req, res, next) {
                     }
                     return 0;
                 }
-                if (a.team > b.team) {
+                if (a.team_id.valueOf() > b.team_id.valueOf()) {
                     return 1;
-                } else if (a.team < b.team) {
+                } else if (a.team_id.valueOf() < b.team_id.valueOf()) {
                     return -1;
                 }
                 return 0;
             });
-            var last_team_name = '';
+            var last_team = '';
             for (var order of the_orders) {
-                if (order.team !== last_team_name) {
-                    if (last_team_name !== '') {
+                if (order.team_id.valueOf() !== last_team) {
+                    if (last_team !== '') {
                         csv += '\n';
                     }
-                    last_team_name = order.team;
+                    last_team = order.team_id.valueOf();
                 }
                 // dirty way to fix empty orders:
                 var at_least_one_order = false;
