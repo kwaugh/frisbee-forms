@@ -9,7 +9,7 @@ Run the image
 
 Note that this container expects another container with mongodb to be running on
 the same machine on the same docker network. For example:
-> docker run --network NETWORK_NAME --name DB_NAME webhippie/mongodb:latest
+> docker run --network NETWORK_NAME --name mongodb webhippie/mongodb:latest
 
 After running this application for the first time with name APP_NAME, in the
 future it can be started by just running
