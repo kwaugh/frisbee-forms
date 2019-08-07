@@ -1,5 +1,5 @@
 global.MONGOJS = require('mongojs');
-global.DB = MONGOJS('frisbee-forms');
+global.DB = MONGOJS('mongodb/frisbee-forms');
 
 var express      = require('express');
 var session      = require('express-session');
