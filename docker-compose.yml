@@ -1,0 +1,8 @@
+version: '3'
+services:
+  frisbee-forms:
+    build: .
+    ports:
+      - "5000:80"
+  mongo:
+    image: "webhippie/mongodb:latest"
