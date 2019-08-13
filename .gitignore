@@ -1,9 +1,10 @@
 .*.swp
 .*.swo
 *.log
-node_modules/
+web/node_modules/
 .DS_Store
 session
 *.vim
 *.txt
-public/photos/*
+web/public/photos/*
+db/backup*
