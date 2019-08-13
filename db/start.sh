@@ -9,7 +9,7 @@ if [ -f ./backup.tgz ]; then
     mkdir backup
     tar -xzf backup.tgz -C backup --strip-components 1
     mongorestore backup
-    rm -rf backup
+    rm -rf backup backup.tgz
 else
     echo "no backup.tgz. not restoring"
 fi
