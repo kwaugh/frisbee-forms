@@ -13,7 +13,7 @@
     "express-session": "^1.12.1",
     "jade": "~1.11.0",
     "jshint": "^2.9.4",
-    "kerberos": "0.0.17",
+    "kerberos": "1.1.3",
     "mongodb": "^2.1.2",
     "mongojs": "^2.2.2",
     "morgan": "~1.6.1",
